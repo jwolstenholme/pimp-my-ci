@@ -12,20 +12,20 @@ class LightsController:
 
   def success(self, build_name):
     print 'success ', build_name
-    strand.fill(0, 255, 0)
+    self.strand.fill(0, 255, 0)
 
   def failure(self, build_name):
     print 'failure ', build_name
-    strand.fill(255, 0, 0) # red
+    self.strand.fill(255, 0, 0) # red
 
   def building_from_success(self, build_name):
     print 'building_from_success ', build_name
-    strand.wheel()
+    self.strand.wheel()
 
   def building_from_failure(self, build_name):
     print 'building_from_failure ', build_name
-    strand.wheel()
+    self.strand.wheel()
 
   def unknown(self, build_name):
     print 'unknown ', build_name
-    strand.fill(255, 255, 255) # white
+    self.strand.fill(255, 255, 255) # white
