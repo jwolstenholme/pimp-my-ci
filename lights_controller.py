@@ -3,14 +3,12 @@
 import sys
 import os
 import Queue
-from time import sleep
 import logging
+from time import sleep
+
 from unrecognised_directive_exception import UnrecognisedDirective
-
-from queue_readers.aws_sqs import PollSQSWorker
-from reporters.state_reporter import StateReporter
-
-from message_translators.jenkins_translator import JenkinsMessageTranslator
+from monitors.jenkins_monitor import JenkinsMonitor
+from pollers.jenkins_poller import JenkinsPoller
 
 logging.basicConfig(level=logging.INFO,
     filename="{0}/logs/pipeline.log".format(os.environ['RPI_HOME']),
@@ -19,30 +17,19 @@ log = logging.getLogger()
 
 def main():
 
-    reporter_q = Queue.Queue()
-    StateReporter(reporter_q).start() # start the thread to report on pipline(s) state
-
-    translator = JenkinsMessageTranslator(reporter_q) # switch this out with something else if need be
-
-    local_q = Queue.Queue()
-    PollSQSWorker(local_q).start() # start a thread to poll for messages on the sqs queue
-
     directive_buffer = current_directive = 'all_off'
     play_sound = False
 
     while True:
         try:
-            translator.issue_directive(current_directive, play_sound) # can throw UnrecognisedDirective
-            play_sound = False
+            # TODO config
+            jobs = ['Truman']
 
-            job = local_q.get_nowait() # this will normally throw Queue.Empty
-
-            log.info('proceeding to process message passed to local queue..')
-            directive_buffer = current_directive
-            current_directive = job
-            play_sound = True
-            local_q.task_done()
-            PollSQSWorker(local_q).start() # old thread has terminated so start another one to poll sqs queue
+            # start polling jenkins
+            build_monitor = JenkinsMonitor(jobs)
+            JenkinsPoller(build_monitor).start()
+            # when there is an update we want to know about it
+            # TODO
 
         except UnrecognisedDirective:
             log.error('bad directive received.. reverting to buffered directive..')
