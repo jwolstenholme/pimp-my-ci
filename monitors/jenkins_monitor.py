@@ -35,9 +35,13 @@ class JenkinsMonitor:
       if (status == 'SUCCESS'):
         self.lights_controller.success(build)
       elif (status == 'FAILURE'):
-        self.lights_controller.failuer(build)
+        self.lights_controller.failure(build)
+      elif (status == 'BUILDING_FROM_SUCCESS'):
+        self.lights_controller.building_from_success(build)
+      elif (status == 'BUILDING_FROM_FAILURE'):
+        self.lights_controller.building_from_failure(build)
       else:
-        self.unknown(build)
+        self.lights_controller.unknown(build)
 
 # private
 
