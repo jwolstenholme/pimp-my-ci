@@ -13,7 +13,6 @@ class JenkinsPoller:
   def start(self):
     while True:
       sleep(3.0) # TODO config
-      print("getting pipeline(s) status...")
 
       req = urllib2.Request('http://xcode-server.local:8080/api/json') # TODO config
       req.add_header('Content-Type', 'application/json')

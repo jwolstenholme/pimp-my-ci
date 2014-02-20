@@ -1,4 +1,8 @@
 
+import logging
+
+log = logging.getLogger()
+
 class JenkinsMonitor:
 
   def __init__(self, jobs, lights_controller):
@@ -29,7 +33,7 @@ class JenkinsMonitor:
     # differences = filter( self.filter_differences, job_statuses )
     # replace current builds with new builds
     self.jobs = job_statuses
-    print 'self.jobs', self.jobs
+    log.info('self.jobs', self.jobs)
     # iterate through each job and update light controller...
     for build, status in self.jobs.iteritems():
       if (status == 'SUCCESS'):
