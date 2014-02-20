@@ -12,7 +12,7 @@ class LightsController:
 
   def success(self, build_name):
     print 'success ', build_name
-    self.strand.fill(0, 255, 0)
+    self.strand.fill(0, 255, 0) # green
 
   def failure(self, build_name):
     print 'failure ', build_name

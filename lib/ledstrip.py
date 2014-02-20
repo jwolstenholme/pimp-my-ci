@@ -106,5 +106,5 @@ class Strand:
 				r = color % 128
 				g = 0
 			self.set(start + i, r, g, b)
-			print r,',',g,',',b
+			# print r,',',g,',',b
 		self.update()
