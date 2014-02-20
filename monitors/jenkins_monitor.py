@@ -1,9 +1,10 @@
 
 class JenkinsMonitor:
 
-  def __init__(self, jobs):
+  def __init__(self, jobs, lights_controller):
 
     self.jobs = dict.fromkeys(jobs)
+    self.lights_controller = lights_controller
 
     self.status_dict = {
       'aborted'         : 'UNKNOWN',
@@ -29,6 +30,14 @@ class JenkinsMonitor:
     # replace current builds with new builds
     self.jobs = job_statuses
     print 'self.jobs', self.jobs
+    # iterate through each job and update light controller...
+    for build, status in self.jobs.iteritems():
+      if (status == 'SUCCESS'):
+        self.lights_controller.success(build)
+      elif (status == 'FAILURE'):
+        self.lights_controller.failuer(build)
+      else:
+        self.unknown(build)
 
 # private
 

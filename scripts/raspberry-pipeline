@@ -7,11 +7,11 @@ export RPI_HOME=/home/pi/raspberry-pipeline
 case "$1" in
     start)
         echo "Starting raspberry-pipeline..."
-        python $RPI_HOME/lights_controller.py 2>&1 &
+        python $RPI_HOME/main.py 2>&1 &
     ;;
     stop)
         echo "Stopping raspberry-pipeline..."
-        RPI_PID=`ps auxwww | grep lights_controller.py | head -1 | awk '{print $2}'`
+        RPI_PID=`ps auxwww | grep main.py | head -1 | awk '{print $2}'`
         kill -9 $RPI_PID
     ;;
     *)

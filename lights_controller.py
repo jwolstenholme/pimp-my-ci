@@ -1,48 +1,33 @@
-# script expects RPI_HOME to be set as an env var
 
-import sys
-import os
-import Queue
-import logging
-from time import sleep
+from lib.base_message_interface import BaseMessageInterface
 
-from unrecognised_directive_exception import UnrecognisedDirective
-from monitors.jenkins_monitor import JenkinsMonitor
-from pollers.jenkins_poller import JenkinsPoller
+class LightsController:
 
-logging.basicConfig(level=logging.INFO,
-    filename="{0}/logs/pipeline.log".format(os.environ['RPI_HOME']),
-    format="%(asctime)s <%(threadName)s>: %(message)s", datefmt='%m/%d/%Y %I:%M:%S %p')
-log = logging.getLogger()
+  # TODO partition the led stip by the builds we're interested in....
 
-def main():
+  def __init__(self, jobs):
+    self.jobs = jobs
+    self.base_message_interface = BaseMessageInterface()
 
-    directive_buffer = current_directive = 'all_off'
-    play_sound = False
+  def success(self, build_name):
+    print 'success ', build_name
+    tokens = ['0', '1', '32', '1.0', 'green']
+    self.base_message_interface.issue_update(tokens)
 
-    while True:
-        try:
-            # TODO config
-            jobs = ['Truman']
+  def failure(self, build_name):
+    print 'failure ', build_name
+    #tokens? ['2', '5', '6', '1.0', 'green', 'white', 'red', 'blue', 'red']
+    tokens = ['0', '1', '32', '1.0', 'red']
+    self.base_message_interface.issue_update(tokens)
 
-            # start polling jenkins
-            build_monitor = JenkinsMonitor(jobs)
-            JenkinsPoller(build_monitor).start()
-            # when there is an update we want to know about it
-            # TODO
+  def building_from_success(self, build_name):
+    print 'building_from_success ', build_name
+    self.base_message_interface.issue_start_build()
 
-        except UnrecognisedDirective:
-            log.error('bad directive received.. reverting to buffered directive..')
-            current_directive = directive_buffer
-            play_sound = False
+  def building_from_failure(self, build_name):
+    print 'building_from_failure ', build_name
+    self.base_message_interface.issue_start_build()
 
-        except Queue.Empty:
-            sleep(0.03) # loop fast enough for animations ---> this could be altered per directive if reqd
-
-        except KeyboardInterrupt:
-            log.info('^C received, shutting down controller')
-            translator.issue_directive('all_off')
-            sys.exit()
-
-if __name__ == '__main__':
-    main()
+  def unknown(self, build_name):
+    print 'unknown ', build_name
+    # self.base_message_interface.issue_unknown()
