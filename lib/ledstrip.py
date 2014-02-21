@@ -22,7 +22,9 @@ Example:
 	>> led = LPD8806.strand()
 	>> led.fill(255, 0, 0)
 """
-import time
+
+from time import sleep
+from threading import Thread
 from pprint import *
 
 pulsing = False
