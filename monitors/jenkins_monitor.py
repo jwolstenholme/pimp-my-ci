@@ -12,7 +12,7 @@ class JenkinsMonitor:
 
     self.status_dict = {
       'aborted'         : 'UNKNOWN',
-      'aborted_anime'   : 'UNKNOWN',
+      'aborted_anime'   : 'BUILDING_FROM_ABORTED',
       'blue'            : 'SUCCESS',
       'blue_anime'      : 'BUILDING_FROM_SUCCESS',
       'disabled'        : 'UNKNOWN',
@@ -33,7 +33,7 @@ class JenkinsMonitor:
     # differences = filter( self.filter_differences, job_statuses )
     # replace current builds with new builds
     self.jobs = job_statuses
-    log.info('self.jobs', self.jobs)
+    log.info("self.jobs: %s", self.jobs)
     # iterate through each job and update light controller...
     for build, status in self.jobs.iteritems():
       if (status == 'SUCCESS'):

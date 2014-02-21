@@ -23,12 +23,14 @@ class LightsController:
 
   def building_from_success(self, build_name):
     log.debug('building_from_success ', build_name)
-    self.strand.wheel()
+    self.strand.pulsate(0, 255, 0) # green
 
   def building_from_failure(self, build_name):
     log.debug('building_from_failure ', build_name)
-    self.strand.wheel()
+    self.strand.pulsate(255, 0, 0) # red
 
   def unknown(self, build_name):
     log.debug('unknown ', build_name)
-    self.strand.fill(255, 255, 255) # white
+    self.strand.wheel()
+
+

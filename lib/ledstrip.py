@@ -25,6 +25,8 @@ Example:
 import time
 from pprint import *
 
+pulsing = False
+
 class Strand:
 
 	def __init__(self, leds=32, dev="/dev/spidev0.0"):
@@ -51,6 +53,9 @@ class Strand:
 		"""
 		Fill the strand (or a subset) with a single color
 		"""
+		global pulsing
+		pulsing = False
+
 		if start < 0: raise NameError("Start invalid:" + str(start))
 		if end == 0: end = self.leds
 		if end > self.leds: raise NameError("End invalid: " + str(end))
@@ -61,6 +66,16 @@ class Strand:
 			self.buffer[led][2] = self.gamma[int(b)]
 
 		self.update()
+
+	def pulsate(self, r, g, b, start=0, end=0):
+		global pulsing
+    if (pulsing): return
+
+    pulsing = True
+
+    worker = Thread(target=pulsate_strand, args=(self, r, g, b, ))
+    worker.setDaemon(True)
+    worker.start()
 
 	def set(self, pixel, r, g, b):
 		"""
@@ -108,3 +123,11 @@ class Strand:
 			self.set(start + i, r, g, b)
 			# print r,',',g,',',b
 		self.update()
+
+def pulsate_strand(strand, r, g, b):
+  global pulsing
+  while pulsing:
+  	for x in range(0, 9):
+    strand.fill(r * 1-x, g * 1-x, b * 1-x)
+    sleep(0.2)
+
