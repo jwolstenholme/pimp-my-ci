@@ -129,8 +129,11 @@ class Strand:
 def pulsate_strand(strand, r, g, b):
 	global pulsing
 	while pulsing:
-		for x in range(0, 9):
-			brightness = 1 - x*.1
+		for x in range(0, 90):
+			brightness = 1 - x*.01
 			strand.fill(r * brightness, g * brightness, b * brightness)
-			sleep(0.2)
-
+			sleep(0.05)
+		for x in range(10, 100):
+			brightness = x*.01
+			strand.fill(r * brightness, g * brightness, b * brightness)
+			sleep(0.05)
