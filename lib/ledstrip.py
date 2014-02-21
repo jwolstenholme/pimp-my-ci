@@ -69,13 +69,13 @@ class Strand:
 
 	def pulsate(self, r, g, b, start=0, end=0):
 		global pulsing
-    if (pulsing): return
+		if (pulsing): return
 
-    pulsing = True
+		pulsing = True
 
-    worker = Thread(target=pulsate_strand, args=(self, r, g, b, ))
-    worker.setDaemon(True)
-    worker.start()
+		worker = Thread(target=pulsate_strand, args=(self, r, g, b, ))
+		worker.setDaemon(True)
+		worker.start()
 
 	def set(self, pixel, r, g, b):
 		"""
@@ -125,9 +125,9 @@ class Strand:
 		self.update()
 
 def pulsate_strand(strand, r, g, b):
-  global pulsing
-  while pulsing:
-  	for x in range(0, 9):
-    strand.fill(r * 1-x, g * 1-x, b * 1-x)
-    sleep(0.2)
+	global pulsing
+	while pulsing:
+		for x in range(0, 9):
+		strand.fill(r * 1-x, g * 1-x, b * 1-x)
+		sleep(0.2)
 
