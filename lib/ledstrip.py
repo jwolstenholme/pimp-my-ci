@@ -130,6 +130,7 @@ def pulsate_strand(strand, r, g, b):
 	global pulsing
 	while pulsing:
 		for x in range(0, 9):
-			strand.fill(r * 1-x, g * 1-x, b * 1-x)
+			brightness = 1 - x*.1
+			strand.fill(r * brightness, g * brightness, b * brightness)
 			sleep(0.2)
 
