@@ -16,18 +16,16 @@ log = logging.getLogger()
 def main():
 
     while True:
+        # TODO config
+        jobs = ['Truman']
+        lights_controller = LightsController(jobs)
         try:
-            # TODO config
-            jobs = ['Truman']
-
             # start polling jenkins
-            lights_controller = LightsController(jobs)
             build_monitor = JenkinsMonitor(jobs, lights_controller)
             JenkinsPoller(build_monitor).start()
-
         except KeyboardInterrupt:
             log.info('^C received, shutting down controller')
-            # TODO translator.issue_directive('all_off')
+            lights_controller.off()
             sys.exit()
 
 if __name__ == '__main__':

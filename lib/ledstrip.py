@@ -51,6 +51,9 @@ class Strand:
 			# Color calculations from http://learn.adafruit.com/light-painting-with-raspberry-pi
 			self.gamma[i] = 0x80 | int(pow(float(i) / 255.0, 2.5) * 127.0 + 0.5)
 
+	def off(self):
+		self.fill(0, 0, 0)
+
 	def fill(self, r, g, b, start=0, end=0):
 		"""
 		Fill the strand (or a subset) with a single color

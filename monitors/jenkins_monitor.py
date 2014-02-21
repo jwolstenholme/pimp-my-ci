@@ -12,19 +12,19 @@ class JenkinsMonitor:
 
     self.status_dict = {
       'aborted'         : 'UNKNOWN',
-      'aborted_anime'   : 'BUILDING_FROM_ABORTED',
+      'aborted_anime'   : 'BUILDING_FROM_UNKNOWN',
       'blue'            : 'SUCCESS',
       'blue_anime'      : 'BUILDING_FROM_SUCCESS',
       'disabled'        : 'UNKNOWN',
-      'disabled_anime'  : 'UNKNOWN',
+      'disabled_anime'  : 'BUILDING_FROM_UNKNOWN',
       'grey'            : 'UNKNOWN',
-      'grey_anime'      : 'UNKNOWN',
+      'grey_anime'      : 'BUILDING_FROM_UNKNOWN',
       'notbuilt'        : 'UNKNOWN',
-      'notbuilt_anime'  : 'UNKNOWN',
+      'notbuilt_anime'  : 'BUILDING_FROM_UNKNOWN',
       'red'             : 'FAILURE',
       'red_anime'       : 'BUILDING_FROM_FAILURE',
       'yellow'          : 'UNKNOWN',
-      'yellow_anime'    : 'UNKNOWN'
+      'yellow_anime'    : 'BUILDING_FROM_UNKNOWN'
     }
 
   def process_build(self, build):
@@ -44,6 +44,8 @@ class JenkinsMonitor:
         self.lights_controller.building_from_success(build)
       elif (status == 'BUILDING_FROM_FAILURE'):
         self.lights_controller.building_from_failure(build)
+      elif (status == 'BUILDING_FROM_UNKNOWN'):
+        self.lights_controller.building_from_unknown(build)
       else:
         self.lights_controller.unknown(build)
 
