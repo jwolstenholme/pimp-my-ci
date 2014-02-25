@@ -1,39 +1,31 @@
 
 import logging
-from threading import Thread
+import sys
+from ledstrip import Strand
+from xtermcolor import colorize
 
 log = logging.getLogger()
 
-from time import sleep
+_NUMERALS = '0123456789abcdefABCDEF'
+_HEXDEC = {v: int(v, 16) for v in (x+y for x in _NUMERALS for y in _NUMERALS)}
+LOWERCASE, UPPERCASE = 'x', 'X'
 
-pulsing = False
+def triplet_int(rgb, lettercase=LOWERCASE):
+  return int(format((rgb[0]<<16 | rgb[1]<<8 | rgb[2]), '06'+lettercase), 16)
 
-class Strand:
+class CliStrand(Strand):
 
-  def fill(self, r, g, b, start=0, end=0):
-    log.info('StubStrand.fill')
-    global pulsing
-    pulsing = False
+  def __init__(self):
+    Strand.__init__(self, 32, '/dev/null')
 
-  def pulsate(self, r, g, b):
-    log.info('StubStrand.pulsate')
-    global pulsing
-    if (pulsing): return
+  def update(self):
+    for x in range(self.leds):
+      g = self.buffer[x][0]
+      r = self.buffer[x][1]
+      b = self.buffer[x][2]
 
-    pulsing = True
+      rgb = triplet_int([r, g, b])
+      sys.stdout.write(colorize( ' * ', rgb=rgb))
+      sys.stdout.flush()
 
-    worker = Thread(target=pulsate_strand, args=(r, g, b, ))
-    worker.setDaemon(True)
-    worker.start()
-
-    log.info('StubStrand.pulsate EXIT!!!!!!!!!!!')
-
-  def wheel(self, start=0, end=0):
-    log.info('StubStrand.wheel')
-
-def pulsate_strand(r, g, b):
-  global pulsing
-  while pulsing:
-    log.info('pulsate_strand sleeping')
-    sleep(5)
-    log.info('pulsate_strand awake')
+    sys.stdout.write("\b" * (self.leds * 3)) # return to start of line

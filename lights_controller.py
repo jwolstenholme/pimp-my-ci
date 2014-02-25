@@ -1,7 +1,8 @@
 
 import logging
 
-from lib.ledstrip import Strand
+# from lib.ledstrip import Strand
+from lib.stubstrip import CliStrand
 
 log = logging.getLogger()
 
@@ -11,7 +12,7 @@ class LightsController:
 
   def __init__(self, jobs):
     self.jobs = jobs
-    self.strand = Strand()
+    self.strand = CliStrand()
 
   def off(self):
     self.strand.off()
