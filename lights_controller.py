@@ -12,7 +12,7 @@ class LightsController:
 
   def __init__(self, jobs):
     self.jobs = jobs
-    self.strand = CliStrand()
+    self.strand = Strand()
 
   def off(self):
     self.strand.off()
