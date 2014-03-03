@@ -11,8 +11,11 @@ case "$1" in
     ;;
     stop)
         echo "Stopping raspberry-pipeline..."
-        RPI_PID=`ps auxwww | grep main.py | head -1 | awk '{print $2}'`
-        kill -9 $RPI_PID
+        RPI_PID=`ps auxwww | grep main.py | grep -v grep | head -1 | awk '{print $2}'`
+        if [ $RPI_PID ]
+        then
+          kill -9 $RPI_PID
+        fi
         python $RPI_HOME/lights_off.py
     ;;
     *)
