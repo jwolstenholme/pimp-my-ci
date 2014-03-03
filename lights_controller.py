@@ -1,8 +1,8 @@
 
 import logging
 
-# from lib.ledstrip import Strand
-from lib.stubstrip import CliStrand
+from lib.ledstrip import Strand
+# from lib.stubstrip import CliStrand
 
 log = logging.getLogger()
 
