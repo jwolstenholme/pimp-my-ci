@@ -17,6 +17,9 @@ class LightsController:
   def off(self):
     self.strand.off()
 
+  def error(self):
+    self.strand.wheel()
+
   def success(self, build_name):
     self.strand.fill(0, 255, 0) # green
 

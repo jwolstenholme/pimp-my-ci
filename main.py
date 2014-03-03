@@ -27,6 +27,9 @@ def main():
             log.info('^C received, shutting down controller')
             lights_controller.off()
             sys.exit()
+        except:
+            log.info( "Unexpected error: %s", sys.exc_info()[0] )
+            lights_controller.error()
 
 if __name__ == '__main__':
     main()
