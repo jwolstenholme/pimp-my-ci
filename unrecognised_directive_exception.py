@@ -1,1 +1,0 @@
-class UnrecognisedDirective(Exception): pass

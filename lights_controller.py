@@ -1,24 +1,21 @@
 
 import logging
 
-from lib.ledstrip import Strand
-# from lib.stubstrip import CliStrand
-
 log = logging.getLogger()
 
 class LightsController:
 
   # TODO partition the led stip by the builds we're interested in....
 
-  def __init__(self, jobs):
+  def __init__(self, jobs, strand):
     self.jobs = jobs
-    self.strand = Strand()
+    self.strand = strand
 
   def off(self):
     self.strand.off()
 
   def error(self):
-    self.strand.wheel()
+    self.strand.fill(255, 255, 0)
 
   def success(self, build_name):
     self.strand.fill(0, 255, 0) # green

@@ -1,4 +1,4 @@
-class Colour:
+class RGBColour:
 
   def __init__(self, r=0.0, g=0.0, b=0.0, bright=1.0):
     if(r > 255.0 or r < 0.0 or g > 255.0 or g < 0.0 or b > 255.0 or b < 0.0):
