@@ -19,20 +19,20 @@ log = logging.getLogger()
 
 def main():
 
+    # TODO config
+    jobs = ['Truman', 'Bob', 'Mary']
+    strand = CliStrand() # default to cli strand
+
+    # check to see if we're not running in cli mode
+    if  (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
+        strand = Strand()
+
+    lights_controller = LightsController(jobs, strand)
+    lights_controller.random()
+
     while True:
-        # TODO config
-        jobs = ['Truman']
-        strand = CliStrand() # default to cli strand
-
-        # check to see if we're not running in cli mode
-        if  (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
-            strand = Strand()
-
-        lights_controller = LightsController(jobs, strand)
-
         try:
             # start polling jenkins
-            lights_controller.error()
             build_monitor = JenkinsMonitor(jobs, lights_controller)
             JenkinsPoller(build_monitor).start()
         except KeyboardInterrupt:
