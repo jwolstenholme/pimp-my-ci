@@ -26,4 +26,4 @@ class CliStrand(Strand):
       sys.stdout.write(colorize( ' * ', rgb=rgb))
       sys.stdout.flush()
 
-    sys.stdout.write("\b" * (self.leds * 3)) # return to start of line
+    sys.stdout.write("\n")

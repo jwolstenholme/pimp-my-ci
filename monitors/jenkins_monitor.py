@@ -1,6 +1,8 @@
 
 import logging
 
+from lib.const import *
+
 log = logging.getLogger()
 
 class JenkinsMonitor:
@@ -11,49 +13,31 @@ class JenkinsMonitor:
     self.lights_controller = lights_controller
 
     self.status_dict = {
-      'aborted'         : 'UNKNOWN',
-      'aborted_anime'   : 'BUILDING_FROM_UNKNOWN',
-      'blue'            : 'SUCCESS',
-      'blue_anime'      : 'BUILDING_FROM_SUCCESS',
-      'disabled'        : 'UNKNOWN',
-      'disabled_anime'  : 'BUILDING_FROM_UNKNOWN',
-      'grey'            : 'UNKNOWN',
-      'grey_anime'      : 'BUILDING_FROM_UNKNOWN',
-      'notbuilt'        : 'UNKNOWN',
-      'notbuilt_anime'  : 'BUILDING_FROM_UNKNOWN',
-      'red'             : 'FAILURE',
-      'red_anime'       : 'BUILDING_FROM_FAILURE',
-      'yellow'          : 'UNKNOWN',
-      'yellow_anime'    : 'BUILDING_FROM_UNKNOWN'
+      'aborted_anime'   : BUILDING_FROM_UNKNOWN,
+      'blue'            : SUCCESS,
+      'blue_anime'      : BUILDING_FROM_SUCCESS,
+      'disabled_anime'  : BUILDING_FROM_UNKNOWN,
+      'grey_anime'      : BUILDING_FROM_UNKNOWN,
+      'notbuilt_anime'  : BUILDING_FROM_UNKNOWN,
+      'red'             : FAILURE,
+      'red_anime'       : BUILDING_FROM_FAILURE,
+      'yellow_anime'    : BUILDING_FROM_UNKNOWN
     }
 
   def process_build(self, build):
     job_statuses = self.__parse_build(build)
-    # TODO compare to previous build status and update if needed
-    # differences = filter( self.filter_differences, job_statuses )
+    differences = self.__filter_differences(self.jobs, job_statuses)
+    # print "differences: %s", differences
+    for build, status in differences.iteritems():
+      self.lights_controller.update_build_status(build, status)
+
     # replace current builds with new builds
     self.jobs = job_statuses
-    log.info("self.jobs: %s", self.jobs)
-    # iterate through each job and update light controller...
-    for build, status in self.jobs.iteritems():
-      if (status == 'SUCCESS'):
-        self.lights_controller.success(build)
-      elif (status == 'FAILURE'):
-        self.lights_controller.failure(build)
-      elif (status == 'BUILDING_FROM_SUCCESS'):
-        self.lights_controller.building_from_success(build)
-      elif (status == 'BUILDING_FROM_FAILURE'):
-        self.lights_controller.building_from_failure(build)
-      elif (status == 'BUILDING_FROM_UNKNOWN'):
-        self.lights_controller.building_from_unknown(build)
-      else:
-        self.lights_controller.unknown(build)
 
 # private
 
-  # def filter_differences(self, build_status):
-  #   print 'filter_differences: ', build_status
-  #   return True
+  def __filter_differences(self, old_builds, new_builds):
+    return dict(new_builds.viewitems() - old_builds.viewitems())
 
   # return true for only the jobs we're interested in
   def __filter_build(self, build):

@@ -1,0 +1,7 @@
+
+SUCCESS                = 0
+BUILDING_FROM_SUCCESS  = 1
+FAILURE                = 2
+BUILDING_FROM_FAILURE  = 3
+UNKNOWN                = 4
+BUILDING_FROM_UNKNOWN  = 5
