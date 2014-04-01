@@ -1,16 +1,9 @@
-
-import logging
-
 from lib.const import *
-
-log = logging.getLogger()
 
 class JenkinsMonitor:
 
-  def __init__(self, jobs, lights_controller):
-
-    self.jobs = dict.fromkeys(jobs)
-    self.lights_controller = lights_controller
+  def __init__(self, job_queues):
+    self.job_queues = job_queues
 
     self.status_dict = {
       'aborted_anime'   : BUILDING_FROM_UNKNOWN,
@@ -26,26 +19,16 @@ class JenkinsMonitor:
 
   def process_build(self, build):
     job_statuses = self.__parse_build(build)
-    differences = self.__filter_differences(self.jobs, job_statuses)
-    # print "differences: %s", differences
-    for build, status in differences.iteritems():
-      self.lights_controller.update_build_status(build, status)
-
-    # replace current builds with new builds
-    self.jobs = job_statuses
-
-# private
-
-  def __filter_differences(self, old_builds, new_builds):
-    return dict(new_builds.viewitems() - old_builds.viewitems())
+    for build, status in job_statuses.iteritems():
+      self.job_queues[build].put(status)
 
   # return true for only the jobs we're interested in
   def __filter_build(self, build):
-    return build['name'] in self.jobs
+    return build['name'] in self.job_queues.keys()
 
   # map jenkins job entries to our jobs
   def __jenkins_to_rpi(self, job):
-    return { job['name'] : self.status_dict[job['color']] }
+    return { job['name'] : self.status_dict.get(job['color'], UNKNOWN) }
 
   # returns dictionary of build_name to current status
   def __parse_build(self, build):

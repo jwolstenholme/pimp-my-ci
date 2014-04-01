@@ -1,6 +1,7 @@
 
 import logging
 import random
+import Queue
 
 from lib.const import *
 from threading import Thread
@@ -8,25 +9,35 @@ from time import sleep
 
 log = logging.getLogger()
 
+def worker(controller, job, queue):
+    while True:
+      item = queue.get()
+      print 'got item: ', job, item
+      controller.update_build_status(job, item)
+      queue.task_done()
+
 class LightsController:
 
-  def __init__(self, jobs, strand):
-    self.jobs = dict.fromkeys(jobs)
+  def __init__(self, job_queues, strand):
+    self.job_leds = dict.fromkeys(job_queues.keys())
+    self.job_queues = job_queues
+    self.jobs = job_queues.keys()
     self.strand = strand
 
-    jobLength = self.strand.leds / len(self.jobs)
+    jobLength = self.strand.leds / len(self.job_leds)
     index = 0
-    for build in self.jobs:
-      self.jobs[build] = [index, index + jobLength, None]
+    for build in self.job_leds:
+      self.job_leds[build] = [index, index + jobLength -1]
       index+=jobLength
 
+    print 'created led segments: ', self.job_leds
+
+    for job, queue in job_queues.iteritems():
+      t = Thread(target=worker, args=(self, job, queue, ))
+      t.daemon = True
+      t.start()
+
   def update_build_status(self, build, status):
-    # update local dictionary of build status
-    self.jobs[build][2] = status
-
-    # perhaps stick this on a queue?
-
-    # update lights
     start = self.__start(build)
     end = self.__end(build)
     if (status == SUCCESS):
@@ -53,52 +64,39 @@ class LightsController:
   def error(self):
     self.strand.fill(0, 0, 255)
 
-  def check_status(self, build, status):
-    return self.jobs[build][2] == status
-
   def __success(self, start, end):
-    # stick new status on queue, wait until empty
-    #  Queue.put(SUCCESS)
     self.strand.fill(0, 255, 0, start, end) # green
 
   def __failure(self, start, end):
     self.strand.fill(255, 0, 0, start, end) # red
 
   def __building_from_success(self, build, start, end):
-    self.__pulsate(build, BUILDING_FROM_SUCCESS, 0, 255, 0, start, end) # green
+    self.__pulsate(0, 255, 0, start, end) # green
 
   def __building_from_failure(self, build, start, end):
-    # self.__pulsate(self.strand, 255, 0, 0, start, end) # red
-    self.__pulsate(build, BUILDING_FROM_SUCCESS, 0, 255, 0, start, end) # green
+    self.__pulsate(255, 0, 0, start, end) # red
 
   def __building_from_unknown(self, build, start, end):
-    # self.__pulsate(self.strand, 255, 255, 0, start, end) # yellow
-    self.__pulsate(build, BUILDING_FROM_SUCCESS, 0, 255, 0, start, end) # green
+    self.__pulsate(255, 255, 0, start, end) # yellow
 
   def __unknown(self, build):
-    self.strand.wheel()
+    self.strand.fill(255, 255, 0) # red
 
   def __start(self, build_name):
-    return self.jobs[build_name][0]
+    return self.job_leds[build_name][0]
 
   def __end(self, build_name):
-    return self.jobs[build_name][1]
+    return self.job_leds[build_name][1]
 
   def __randomRgb(self):
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-  def __pulsate(self, build, status, r, g, b, start=0, end=0):
-    worker = Thread(target=pulsate_strand, args=(self.strand, self.jobs[build][2], status, r, g, b, start, end, ))
-    worker.setDaemon(True)
-    worker.start()
-
-def pulsate_strand(strand, build_reference, status, r, g, b, start, end):
-  while build_reference == status:
+  def __pulsate(self, r, g, b, start, end):
     for x in range(0, 40):
       brightness = 1 - x*.02
-      strand.fill(r * brightness, g * brightness, b * brightness, start, end)
+      self.strand.fill(r * brightness, g * brightness, b * brightness, start, end)
       sleep(0.02)
     for x in range(40, 0, -1):
       brightness = 1 - x*.02
-      strand.fill(r * brightness, g * brightness, b * brightness, start, end)
+      self.strand.fill(r * brightness, g * brightness, b * brightness, start, end)
       sleep(0.02)
