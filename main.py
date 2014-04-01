@@ -40,12 +40,14 @@ def main():
     lights_controller.random()
     strand.update()
 
+    # start polling jenkins
+    build_monitor = JenkinsMonitor(job_queues)
+    JenkinsPoller(build_monitor).start()
+
     while True:
         try:
-            # start polling jenkins
-            build_monitor = JenkinsMonitor(job_queues)
-            JenkinsPoller(build_monitor).start()
             strand.update()
+            sleep(0.05)
         except KeyboardInterrupt:
             log.info('^C received, shutting down controller')
             lights_controller.off()
