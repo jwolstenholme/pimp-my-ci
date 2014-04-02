@@ -71,7 +71,7 @@ class LightsController:
       self.strand.fill(rgb[0], rgb[1], rgb[2], self.__start(build), self.__end(build))
 
   def error(self):
-    self.__fill_strand(BLUE)
+    self.__fill_strand(BLUE, 0, 0)
 
   def __success(self, start, end):
     self.__fill_strand(GREEN, start, end)
@@ -92,6 +92,7 @@ class LightsController:
     self.__fill_strand(YELLOW, start, end)
 
   def __fill_strand(self, color, start, end):
+    # print '__fill_strand: ', color, start, end
     self.strand.fill(color[0], color[1], color[2], start, end)
 
   def __start(self, build_name):

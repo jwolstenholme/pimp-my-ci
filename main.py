@@ -6,15 +6,14 @@ import logging
 import traceback
 import Queue
 
-# testing only...
 from time import sleep
-from lib.const import *
-
 from lib.ledstrip import Strand
 from lib.stubstrip import CliStrand
 from lib.lights_controller import LightsController
 from monitors.jenkins_monitor import JenkinsMonitor
 from pollers.jenkins_poller import JenkinsPoller
+
+print 'RPI_HOME: ', os.environ['RPI_HOME']
 
 logging.basicConfig(
     level=logging.INFO,
@@ -46,7 +45,7 @@ def main():
 
     while True:
         try:
-            strand.update()
+#            strand.update()
             sleep(0.05)
         except KeyboardInterrupt:
             log.info('^C received, shutting down controller')

@@ -63,7 +63,7 @@ class Strand:
 		for led in range(start, end):
 			self.set(led, r, g, b)
 
-		# self.update()
+		self.update()
 
 	def set(self, pixel, r, g, b):
 		"""
