@@ -27,10 +27,6 @@ from time import sleep
 from threading import Thread
 from pprint import *
 
-import threading
-
-semaphore = threading.BoundedSemaphore()
-
 class Strand:
 
 	def __init__(self, leds=32, dev="/dev/spidev0.0"):
@@ -60,7 +56,6 @@ class Strand:
 		"""
 		Fill the strand (or a subset) with a single color
 		"""
-		semaphore.acquire()
 		if start < 0: raise NameError("Start invalid:" + str(start))
 		if end == 0: end = self.leds
 		if end > self.leds: raise NameError("End invalid: " + str(end))
@@ -69,7 +64,6 @@ class Strand:
 			self.set(led, r, g, b)
 
 		self.update()
-		semaphore.release()
 
 	def set(self, pixel, r, g, b):
 		"""
