@@ -54,7 +54,6 @@ def main():
 
             # log.error( "exc_info: %s", sys.exc_info() )
             lights_controller.error()
-            strand.update()
 
 if __name__ == '__main__':
     main()
