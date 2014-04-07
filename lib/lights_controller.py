@@ -17,7 +17,7 @@ def worker(controller, job, queue):
       controller.update_build_status(job, status)
       queue.task_done()
     except Queue.Empty:
-      sleep(1.0)
+      sleep(0.3)
 
 class LightsController:
 
