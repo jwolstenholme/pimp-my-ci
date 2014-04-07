@@ -9,34 +9,28 @@ from threading import Thread
 from time import sleep
 
 log = logging.getLogger()
-semaphore = threading.BoundedSemaphore()
 
 def worker(controller, job, queue):
-  status = UNKNOWN
   while True:
     try:
       status = queue.get_nowait()
       controller.update_build_status(job, status)
       queue.task_done()
     except Queue.Empty:
-      controller.update_build_status(job, status)
-    sleep(1.0)
+      sleep(1.0)
 
 class LightsController:
 
   def __init__(self, job_queues, strand):
     self.job_leds = dict.fromkeys(job_queues.keys())
-    self.job_queues = job_queues
     self.jobs = job_queues.keys()
     self.strand = strand
 
     jobLength = self.strand.leds / len(self.job_leds)
     index = 0
     for build in self.job_leds:
-      self.job_leds[build] = [index, index + jobLength-1]
-      index+=jobLength
-
-    # print 'created led segments: ', self.job_leds
+      self.job_leds[build] = [index, index + jobLength]
+      index+=jobLength + 1
 
     for job, queue in job_queues.iteritems():
       t = Thread(target=worker, args=(self, job, queue, ))
@@ -44,7 +38,6 @@ class LightsController:
       t.start()
 
   def update_build_status(self, build, status):
-    semaphore.acquire()
     start = self.__start(build)
     end = self.__end(build)
     # print 'update_build_status: ', build, status, start, end
@@ -60,7 +53,6 @@ class LightsController:
       self.__building_from_unknown(build, start, end)
     else:
       self.__unknown(build, start, end)
-    semaphore.release()
 
   def off(self):
     self.strand.off()
@@ -92,7 +84,6 @@ class LightsController:
     self.__fill_strand(YELLOW, start, end)
 
   def __fill_strand(self, color, start, end):
-    # print '__fill_strand: ', color, start, end
     self.strand.fill(color[0], color[1], color[2], start, end)
 
   def __start(self, build_name):

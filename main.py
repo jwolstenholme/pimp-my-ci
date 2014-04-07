@@ -26,8 +26,7 @@ def main():
 
     # TODO config
     jobs = ['Truman', 'ChannelApi', 'Security-POC']
-    job_queues = dict.fromkeys(jobs, Queue.Queue())
-    print 'job_queues: ', job_queues
+    job_queues = {job: Queue.Queue() for job in jobs}
 
     strand = CliStrand() # default to cli strand
 
@@ -36,8 +35,7 @@ def main():
         strand = Strand()
 
     lights_controller = LightsController(job_queues, strand)
-    lights_controller.random()
-    strand.update()
+    lights_controller.off()
 
     # start polling jenkins
     build_monitor = JenkinsMonitor(job_queues)
@@ -45,7 +43,6 @@ def main():
 
     while True:
         try:
-#            strand.update()
             sleep(0.05)
         except KeyboardInterrupt:
             log.info('^C received, shutting down controller')

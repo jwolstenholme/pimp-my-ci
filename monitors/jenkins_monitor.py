@@ -20,7 +20,7 @@ class JenkinsMonitor:
   def process_build(self, build):
     job_statuses = self.__parse_build(build)
     for build, status in job_statuses.iteritems():
-      self.job_queues[build].put(status)
+      self.job_queues[build].put_nowait(status)
 
   # return true for only the jobs we're interested in
   def __filter_build(self, build):
