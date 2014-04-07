@@ -19,7 +19,9 @@ logging.basicConfig(
     level=logging.INFO,
     filename="{0}/logs/pipeline.log".format(os.environ['RPI_HOME']),
     format="%(asctime)s <%(threadName)s>: %(message)s",
-    datefmt='%m/%d/%Y %I:%M:%S %p')
+    datefmt='%m/%d/%Y %I:%M:%S %p',
+    maxBytes=1024,
+    backupCount=3)
 log = logging.getLogger()
 
 def main():
