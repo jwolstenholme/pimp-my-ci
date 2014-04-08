@@ -11,13 +11,17 @@ from time import sleep
 log = logging.getLogger()
 
 def worker(controller, job, queue):
+  status = OFF
   while True:
     try:
       status = queue.get_nowait()
       controller.update_build_status(job, status)
       queue.task_done()
     except Queue.Empty:
-      sleep(0.3)
+      if (status % 2 == 1): # check to see if we're an animation
+        controller.update_build_status(job, status)
+      elif:
+        sleep(1)
 
 class LightsController:
 
@@ -41,7 +45,9 @@ class LightsController:
     start = self.__start(build)
     end = self.__end(build)
     # print 'update_build_status: ', build, status, start, end
-    if (status == SUCCESS):
+    if (status == OFF):
+      self.__off(start, end)
+    elif (status == SUCCESS):
       self.__success(start, end)
     elif (status == FAILURE):
       self.__failure(start, end)
@@ -64,6 +70,9 @@ class LightsController:
 
   def error(self):
     self.__fill_strand(BLUE, 0, 0)
+
+  def __off(self, start, end):
+    self.__fill_strand(NONE, start, end)
 
   def __success(self, start, end):
     self.__fill_strand(GREEN, start, end)
