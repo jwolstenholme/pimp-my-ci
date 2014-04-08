@@ -20,7 +20,7 @@ def worker(controller, job, queue):
     except Queue.Empty:
       if (status % 2 == 1): # check to see if we're an animation
         controller.update_build_status(job, status)
-      elif:
+      else:
         sleep(1)
 
 class LightsController:
