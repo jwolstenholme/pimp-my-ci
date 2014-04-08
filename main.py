@@ -27,7 +27,7 @@ log = logging.getLogger()
 def main():
 
     # TODO config
-    jobs = ['Truman', 'ChannelApi', 'Security-POC']
+    jobs = ['Truman', 'ChannelApi']
     job_queues = {job: Queue.Queue() for job in jobs}
 
     strand = CliStrand() # default to cli strand
