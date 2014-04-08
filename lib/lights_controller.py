@@ -34,7 +34,7 @@ class LightsController:
     index = 0
     for build in self.job_leds:
       self.job_leds[build] = [index, index + jobLength]
-      index+=jobLength + 1
+      index+=jobLength
 
     for job, queue in job_queues.iteritems():
       t = Thread(target=worker, args=(self, job, queue, ))
