@@ -33,7 +33,7 @@ class LightsController:
     jobLength = self.strand.leds / len(self.job_leds)
     index = 0
     for build in self.job_leds:
-      self.job_leds[build] = [index, index + jobLength]
+      self.job_leds[build] = [index, index + jobLength - 1]
       index+=jobLength
 
     for job, queue in job_queues.iteritems():
