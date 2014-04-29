@@ -1,9 +1,13 @@
 
 from time import sleep
-import urllib2
+import logging
 import json
+import sys
 import threading
+import urllib2
 import yaml
+
+log = logging.getLogger()
 
 # TODO probably just a json/http poller
 class JenkinsPoller(threading.Thread):
@@ -18,8 +22,12 @@ class JenkinsPoller(threading.Thread):
     while poll:
       sleep(3.0) # TODO config
 
-      req = urllib2.Request('http://xcode-server.local:8080/api/json') # TODO config
-      req.add_header('Content-Type', 'application/json')
+      try:
+        req = urllib2.Request('http://xcode-server.local:8080/api/json') # TODO config
+        req.add_header('Content-Type', 'application/json')
 
-      response_body = urllib2.urlopen(req).read()
-      self.build_monitor.process_build( yaml.load(response_body) )
+        response_body = urllib2.urlopen(req).read()
+        self.build_monitor.process_build( yaml.load(response_body) )
+      except:
+        self.build_monitor.error()
+        log.error( "JenkinsPoller error: %s", sys.exc_info()[0] )

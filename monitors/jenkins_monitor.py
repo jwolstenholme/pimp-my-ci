@@ -27,6 +27,10 @@ class JenkinsMonitor:
 
     self.job_statuses = job_statuses
 
+  def error(self):
+    for build, status in self.job_statuses.iteritems():
+      self.job_queues[build].put_nowait(UNKNOWN)
+
   def __filter_differences(self, old_builds, new_builds):
     return dict(new_builds.viewitems() - old_builds.viewitems())
 
