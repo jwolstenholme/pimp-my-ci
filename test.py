@@ -5,7 +5,7 @@ from lib.ledstrip import Strand
 from lib.const import *
 from lib.lights_controller import LightsController
 
-jobs = ['Truman', 'ChannelApi', 'Security-POC']
+jobs = ['Truman-ios', 'ChannelApi', 'Security-POC']
 job_queues = {job: Queue.Queue() for job in jobs}
 
 print 'job_queues: ', job_queues
@@ -15,14 +15,14 @@ strand.fill(0, 0, 0)
 
 lights_controller = LightsController(job_queues, strand)
 
-job_queues['Truman'].put_nowait(SUCCESS)
+job_queues['Truman-ios'].put_nowait(SUCCESS)
 job_queues['ChannelApi'].put_nowait(FAILURE)
 job_queues['Security-POC'].put_nowait(UNKNOWN)
 
 sleep(2)
 
 job_queues['Security-POC'].put_nowait(SUCCESS)
-job_queues['Truman'].put_nowait(FAILURE)
+job_queues['Truman-ios'].put_nowait(FAILURE)
 job_queues['ChannelApi'].put_nowait(UNKNOWN)
 
 sleep(2)

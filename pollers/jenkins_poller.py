@@ -23,7 +23,7 @@ class JenkinsPoller(threading.Thread):
       sleep(3.0) # TODO config
 
       try:
-        req = urllib2.Request('http://xcode-server.local:8080/api/json') # TODO config
+        req = urllib2.Request('http://jenkins.metest.local/api/json') # TODO config
         req.add_header('Content-Type', 'application/json')
 
         response_body = urllib2.urlopen(req).read()
