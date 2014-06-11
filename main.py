@@ -27,7 +27,7 @@ log = logging.getLogger()
 def main():
 
     # TODO config
-    jobs = ['Truman-ios', 'ChannelApi', 'Monitor U 01 Channel Arrangement'] 
+    jobs = ['Truman-ios', 'ChannelApi', 'Monitor U 01 Channel Arrangement', 'Android_01_Unit'] 
     job_queues = {job: Queue.Queue() for job in jobs}
 
     strand = CliStrand() # default to cli strand
