@@ -31,11 +31,13 @@ def main():
     #job_queues = {job: Queue.Queue() for job in jobs}
 
     jobs = [
-        {'name' : 'Truman-ios', 'leds': 5}, 
-        {'name' : 'ChannelApi', 'leds': 5},
-        {'name' : 'Monitor U 01 Channel Arrangement', 'leds': 5},
+        {'name' : 'Truman-ios', 'leds': 4}, 
+        {'name' : 'ChannelApi', 'leds': 4},
+        {'name' : 'Monitor U 01 Channel Arrangement', 'leds': 4},
         {'name' : 'Android_Commit', 'leds': 2},
-        {'name' : 'MonkeyTalk', 'leds': 5},
+	{'name' : 'Android_Functional', 'leds': 2},
+	{'name' : 'Android_Hockey_Deploy', 'leds': 2},
+        {'name' : 'MonkeyTalk', 'leds': 4},
     ]
 
     job_config = [{job['name']: {'leds': job['leds']}} for job in jobs]
@@ -48,11 +50,11 @@ def main():
     if  (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
         strand = Strand()
 
-    lights_controller = LightsController(job_config, strand)
+    lights_controller = LightsController(job_queues, strand, job_config)
     lights_controller.off()
 
     # start polling jenkins
-    build_monitor = JenkinsMonitor(job_queues job_queues)
+    build_monitor = JenkinsMonitor(job_queues)
     JenkinsPoller(build_monitor).start()
 
     while True:
