@@ -31,6 +31,7 @@ class LightsController:
   def __init__(self, strand, job_queues, build_jobs):
     self.job_leds = dict()
     self.jobs = list()
+    self.strand = strand
 
     index = 0
     for job in build_jobs:

@@ -46,7 +46,7 @@ def main():
     if (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
         strand = Strand()
 
-    lights_controller = LightsController(strand, build_jobs)
+    lights_controller = LightsController(strand, job_queues, build_jobs)
     lights_controller.off()
 
     # start polling jenkins
