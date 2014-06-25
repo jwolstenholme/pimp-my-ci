@@ -35,8 +35,9 @@ class LightsController:
 
     index = 0
     for job in build_jobs:
-        self.jobs.append(job.name)
-        self.job_leds[job.name] = job.led_addresses(index)
+        self.jobs.append(job.name)  
+        addresses = job.led_addresses(index)
+        self.job_leds[job.name] = job.led_coordinates(addresses)
         index = job.next_index(index)
 
     for job, queue in job_queues.iteritems():

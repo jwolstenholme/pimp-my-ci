@@ -20,6 +20,9 @@ class BuildJob:
     def led_addresses(self, index):
         return range(index, min(index + self.num_leds, self.max_leds))
 
+    def led_coordinates(self, addresses):
+        return [addresses[0], addresses[-1]]
+
     def next_index(self, index):
         if index >= self.max_leds - 1:
             raise ArithmeticError('No leds available')
