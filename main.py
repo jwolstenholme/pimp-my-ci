@@ -27,8 +27,20 @@ log = logging.getLogger()
 def main():
 
     # TODO config
-    jobs = ['Truman-ios', 'ChannelApi', 'Monitor U 01 Channel Arrangement', 'Android_Commit', 'MonkeyTalk'] 
-    job_queues = {job: Queue.Queue() for job in jobs}
+    #jobs = ['Truman-ios', 'ChannelApi', 'Monitor U 01 Channel Arrangement', 'Android_Commit', 'MonkeyTalk'] 
+    #job_queues = {job: Queue.Queue() for job in jobs}
+
+    jobs = [
+        {'name' : 'Truman-ios', 'leds': 5}, 
+        {'name' : 'ChannelApi', 'leds': 5},
+        {'name' : 'Monitor U 01 Channel Arrangement', 'leds': 5},
+        {'name' : 'Android_Commit', 'leds': 2},
+        {'name' : 'MonkeyTalk', 'leds': 5},
+    ]
+
+    job_config = [{job['name']: {'leds': job['leds']}} for job in jobs]
+    job_queues = {val['name']: Queue.Queue() for val in jobs}
+
 
     strand = CliStrand() # default to cli strand
 
@@ -36,11 +48,11 @@ def main():
     if  (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
         strand = Strand()
 
-    lights_controller = LightsController(job_queues, strand)
+    lights_controller = LightsController(job_config, strand)
     lights_controller.off()
 
     # start polling jenkins
-    build_monitor = JenkinsMonitor(job_queues)
+    build_monitor = JenkinsMonitor(job_queues job_queues)
     JenkinsPoller(build_monitor).start()
 
     while True:

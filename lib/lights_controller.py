@@ -25,16 +25,16 @@ def worker(controller, job, queue):
 
 class LightsController:
 
-  def __init__(self, job_queues, strand):
-    self.job_leds = dict.fromkeys(job_queues.keys())
-    self.jobs = job_queues.keys()
-    self.strand = strand
-
-    jobLength = self.strand.leds / len(self.job_leds)
+  def __init__(self, strand, job_queues, job_config):
+    self.job_leds = dict()
+    self.jobs = list()
     index = 0
-    for build in self.job_leds:
-      self.job_leds[build] = [index, index + jobLength - 1]
-      index+=jobLength
+
+    for job in job_config:
+      for job_key in job.keys():
+       leds = job[job_key]['leds']
+       job_leds[job_key] = [index, index + leds]
+       index+=jobLength
 
     for job, queue in job_queues.iteritems():
       t = Thread(target=worker, args=(self, job, queue, ))
