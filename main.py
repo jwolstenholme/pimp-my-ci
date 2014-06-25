@@ -29,13 +29,13 @@ def main():
     # TODO config
     num_leds = 4
     build_jobs = [
-        BuildJob(name='Truman-ios',                       num_leds=num_leds),
-        BuildJob(name='ChannelApi-ios',                   num_leds=num_leds),
         BuildJob(name='Monitor U 01 Channel Arrangement', num_leds=num_leds),
+        BuildJob(name='Truman-ios',                       num_leds=num_leds),
+        BuildJob(name='MonkeyTalk',                       num_leds=num_leds),
         BuildJob(name='Android_Commit',                   num_leds=2, offset=0),
         BuildJob(name='Android_Functional',               num_leds=2, offset=0),
         BuildJob(name='Android_Hockey_Deploy',            num_leds=2),
-        BuildJob(name='MonkeyTalk',                       num_leds=num_leds),
+        BuildJob(name='ChannelApi',                       num_leds=num_leds)
     ]
 
     job_queues = {job.name: Queue.Queue() for job in build_jobs}
