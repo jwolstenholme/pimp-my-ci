@@ -9,6 +9,7 @@ import Queue
 from time import sleep
 from lib.ledstrip import Strand
 from lib.stubstrip import CliStrand
+from lib.build_job import BuildJob
 from lib.lights_controller import LightsController
 from monitors.jenkins_monitor import JenkinsMonitor
 from pollers.jenkins_poller import JenkinsPoller
@@ -25,32 +26,27 @@ logging.basicConfig(
 log = logging.getLogger()
 
 def main():
-
     # TODO config
-    #jobs = ['Truman-ios', 'ChannelApi', 'Monitor U 01 Channel Arrangement', 'Android_Commit', 'MonkeyTalk'] 
-    #job_queues = {job: Queue.Queue() for job in jobs}
-
-    jobs = [
-        {'name' : 'Truman-ios', 'leds': 4}, 
-        {'name' : 'ChannelApi', 'leds': 4},
-        {'name' : 'Monitor U 01 Channel Arrangement', 'leds': 4},
-        {'name' : 'Android_Commit', 'leds': 2},
-	{'name' : 'Android_Functional', 'leds': 2},
-	{'name' : 'Android_Hockey_Deploy', 'leds': 2},
-        {'name' : 'MonkeyTalk', 'leds': 4},
+    num_leds = 4
+    build_jobs = [
+        BuildJob(name='Truman-ios',                       num_leds=num_leds),
+        BuildJob(name='ChannelApi-ios',                   num_leds=num_leds),
+        BuildJob(name='Monitor U 01 Channel Arrangement', num_leds=num_leds),
+        BuildJob(name='Android_Commit',                   num_leds=2, offset=0),
+        BuildJob(name='Android_Functional',               num_leds=2, offset=0),
+        BuildJob(name='Android_Hockey_Deploy',            num_leds=2),
+        BuildJob(name='MonkeyTalk',                       num_leds=num_leds),
     ]
 
-    job_config = [{job['name']: {'leds': job['leds']}} for job in jobs]
-    job_queues = {val['name']: Queue.Queue() for val in jobs}
+    job_queues = {job.name: Queue.Queue() for job in build_jobs}
 
-
-    strand = CliStrand() # default to cli strand
+    strand = CliStrand()  # default to cli strand
 
     # check to see if we're not running in cli mode
-    if  (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
+    if (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
         strand = Strand()
 
-    lights_controller = LightsController(job_queues, strand, job_config)
+    lights_controller = LightsController(strand, build_jobs)
     lights_controller.off()
 
     # start polling jenkins
@@ -65,8 +61,8 @@ def main():
             lights_controller.off()
             sys.exit()
         except:
-            log.error( "Unexpected error: %s", sys.exc_info()[0] )
-            log.error( traceback.format_exc() )
+            log.error("Unexpected error: %s", sys.exc_info()[0])
+            log.error(traceback.format_exc())
 
             # log.error( "exc_info: %s", sys.exc_info() )
             lights_controller.error()

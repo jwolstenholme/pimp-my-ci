@@ -8,6 +8,9 @@ from lib.const import *
 from threading import Thread
 from time import sleep
 
+from lib.const import *
+
+
 log = logging.getLogger()
 
 def worker(controller, job, queue):
@@ -25,18 +28,15 @@ def worker(controller, job, queue):
 
 class LightsController:
 
-  def __init__(self,job_queues, strand, job_config):
+  def __init__(self, strand, job_queues, build_jobs):
     self.job_leds = dict()
-    self.jobs = list() 
-    self.strand = strand
-    index = 0
+    self.jobs = list()
 
-    for job in job_config:
-      self.jobs.append(job)
-      for job_key in job.keys():
-       leds = job[job_key]['leds']
-       self.job_leds[job_key] = [index, index + leds]
-       index+=leds + 1
+    index = 0
+    for job in build_jobs:
+        self.jobs.append(job.name)
+        self.job_leds[job.name] = job.led_addresses(index)
+        index = job.next_index(index)
 
     for job, queue in job_queues.iteritems():
       t = Thread(target=worker, args=(self, job, queue, ))
