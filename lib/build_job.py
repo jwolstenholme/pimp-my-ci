@@ -17,10 +17,12 @@ class BuildJob:
         self.num_leds = num_leds
         self.offset = offset
 
+    #Returns the array of led index's this job will occupy at the given index
     def led_addresses(self, index):
         return range(index, min(index + self.num_leds, self.max_leds))
 
-    def led_coordinates(self, addresses):
+    def led_coordinates(self, index):
+        addresses = self.led_addresses(index)
         return [addresses[0], (addresses[-1] + 1)]
 
     def next_index(self, index):

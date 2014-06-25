@@ -27,14 +27,14 @@ log = logging.getLogger()
 
 def main():
     # TODO config
-    num_leds = 4
+    num_leds = 5
     build_jobs = [
         BuildJob(name='Monitor U 01 Channel Arrangement', num_leds=num_leds),
         BuildJob(name='Truman-ios',                       num_leds=num_leds),
         BuildJob(name='MonkeyTalk',                       num_leds=num_leds),
         BuildJob(name='Android_Commit',                   num_leds=2, offset=0),
         BuildJob(name='Android_Functional',               num_leds=2, offset=0),
-        BuildJob(name='Android_Hockey_Deploy',            num_leds=2),
+        BuildJob(name='Android_Hockey_Deploy',            num_leds=1),
         BuildJob(name='ChannelApi',                       num_leds=num_leds)
     ]
 

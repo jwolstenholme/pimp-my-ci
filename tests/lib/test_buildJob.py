@@ -42,8 +42,15 @@ class TestBuildJob(TestCase):
         self.assertEqual(build_job.next_index(0), 5)
 
     def test_next_index_with_large_padding(self):
-            build_job = BuildJob('Some Job', num_leds=4, offset= 5)
-            self.assertEqual(build_job.next_index(0), 9)
+        build_job = BuildJob('Some Job', num_leds=4, offset=5)
+        self.assertEqual(build_job.next_index(0), 9)
 
     def test_next_index_upper_bounds(self):
         self.assertRaises(ArithmeticError, self.build_job.next_index, 31)
+
+    def test_coordinates(self):
+        build_job = BuildJob('Some Job', num_leds=4)
+        self.assertEqual(build_job.led_coordinates(0), [0, 4])
+        self.assertEqual(build_job.led_coordinates(10), [10, 14])
+        self.assertEqual(build_job.led_coordinates(29), [29, 32])
+
