@@ -29,7 +29,7 @@ def main():
     # TODO config
     num_leds = 4
     build_jobs = [
-        BuildJob(name='Monitor G 01 Channel Arrangement',   num_leds=num_leds),
+        BuildJob(name='Monitor DEV G Channel Arrangement',   num_leds=num_leds),
         BuildJob(name='Truman-ios',                         num_leds=num_leds),
         BuildJob(name='MonkeyTalk',                         num_leds=2, offset=0),
         BuildJob(name='Android_Monkey_Matrix',                     num_leds=2),
