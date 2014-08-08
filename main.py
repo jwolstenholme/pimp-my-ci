@@ -7,6 +7,7 @@ import traceback
 import Queue
 
 from time import sleep
+from config.config import Config
 from lib.ledstrip import Strand
 from lib.stubstrip import CliStrand
 from lib.build_job import BuildJob
@@ -14,7 +15,7 @@ from lib.lights_controller import LightsController
 from monitors.jenkins_monitor import JenkinsMonitor
 from pollers.jenkins_poller import JenkinsPoller
 
-print 'RPI_HOME: ', os.environ['RPI_HOME']
+# print 'RPI_HOME: ', os.environ['RPI_HOME']
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,29 +27,10 @@ logging.basicConfig(
 log = logging.getLogger()
 
 def main():
-    # TODO config
-    num_leds = 4
-    build_jobs = [
-        BuildJob(name='Monitor DEV G Channel Arrangement',   num_leds=num_leds),
-        BuildJob(name='Truman-ios',                         num_leds=num_leds),
-        BuildJob(name='MonkeyTalk',                         num_leds=2, offset=0),
-        BuildJob(name='Android_Monkey_Matrix',                     num_leds=2),
-        BuildJob(name='Android_Commit',                     num_leds=2, offset=0),
-        BuildJob(name='Android_Functional',                 num_leds=2, offset=0),
-        BuildJob(name='Android_Hockey_Deploy',              num_leds=1),
-        BuildJob(name='ChannelApi',                         num_leds=num_leds),
-        BuildJob(name='DAM',                                num_leds=num_leds)
-    ]
 
-    job_queues = {job.name: Queue.Queue() for job in build_jobs}
+    job_queues = { job.name: Queue.Queue() for job in Config.jobs }
 
-    strand = CliStrand()  # default to cli strand
-
-    # check to see if we're not running in cli mode
-    if (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
-        strand = Strand()
-
-    lights_controller = LightsController(strand, job_queues, build_jobs)
+    lights_controller = LightsController(Strand(), job_queues, Config.jobs)
     lights_controller.off()
 
     # start polling jenkins
