@@ -66,7 +66,7 @@ class LightsController:
   def random(self):
     for build in self.jobs:
       rgb = self.__randomRgb()
-      self.strand.fill(rgb[0], rgb[1], rgb[2], self.__start(build), self.__end(build))
+      self.strand.fillRGB(rgb[0], rgb[1], rgb[2], self.__start(build), self.__end(build))
 
   def error(self):
     self.__fill_strand(BLUE, 0, 0)
@@ -93,7 +93,7 @@ class LightsController:
     self.__fill_strand(YELLOW, start, end)
 
   def __fill_strand(self, color, start, end):
-    self.strand.fill(color[0], color[1], color[2], start, end)
+    self.strand.fillRGB(color[0], color[1], color[2], start, end)
 
   def __start(self, build_name):
     return self.job_leds[build_name][0]
