@@ -94,6 +94,7 @@ class LightsController:
 
   def __fill_strand(self, color, start, end):
     self.strand.fillRGB(color[0], color[1], color[2], start, end)
+    self.strand.update()
 
   def __start(self, build_name):
     return self.job_leds[build_name][0]
@@ -105,8 +106,8 @@ class LightsController:
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
   def __pulsate(self, color, start=0, end=0):
-    anim = LarsonScanner(led, Color(color[0], color[1], color[2]),2, 0.75, start, end)
-    for i in range(led.lastIndex):
+    anim = LarsonScanner(self.strand, Color(color[0], color[1], color[2]),2, 0.75, start, end)
+    for i in range(end-start):
       anim.step()
-      led.update()
+      self.strand.update()
 

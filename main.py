@@ -32,7 +32,7 @@ def main():
 
     job_queues = { job.name: Queue.Queue() for job in Config.jobs }
 
-    lights_controller = LightsController(LEDStrip(32), job_queues, Config.jobs)
+    lights_controller = LightsController(LEDStrip(32, True), job_queues, Config.jobs)
     lights_controller.off()
 
     # start polling jenkins
