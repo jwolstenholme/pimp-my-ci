@@ -7,6 +7,7 @@ from xtermcolor.ColorMap import XTermColorMap, VT100ColorMap
 
 log = logging.getLogger()
 
+# Designed to be used as a command line led strip simulator
 class CliStrand(Strand):
 
   def __init__(self):

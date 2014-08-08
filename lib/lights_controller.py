@@ -8,9 +8,6 @@ from lib.const import *
 from threading import Thread
 from time import sleep
 
-from lib.const import *
-
-
 log = logging.getLogger()
 
 def worker(controller, job, queue):
@@ -64,7 +61,7 @@ class LightsController:
       self.__unknown(build, start, end)
 
   def off(self):
-    self.strand.off()
+    self.strand.fillOff()
 
   def random(self):
     for build in self.jobs:
@@ -108,11 +105,8 @@ class LightsController:
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
   def __pulsate(self, color, start=0, end=0):
-    for x in range(0, 40):
-      b = 1 - x*.02
-      self.strand.fill(color[0] * b, color[1] * b, color[2] * b, start, end)
-      sleep(0.02)
-    for x in range(40, 0, -1):
-      b = 1 - x*.02
-      self.strand.fill(color[0] * b, color[1] * b, color[2] * b, start, end)
-      sleep(0.02)
+    anim = LarsonScanner(led, Color(color[0], color[1], color[2]),2, 0.75, start, end)
+    for i in range(led.lastIndex):
+      anim.step()
+      led.update()
+

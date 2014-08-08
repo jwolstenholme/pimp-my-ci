@@ -8,8 +8,10 @@ import Queue
 
 from time import sleep
 from config.config import Config
-from lib.ledstrip import Strand
-from lib.stubstrip import CliStrand
+#from lib.ledstrip import Strand
+#from lib.stubstrip import CliStrand
+from raspledstrip.ledstrip import *
+from raspledstrip.animation import *
 from lib.build_job import BuildJob
 from lib.lights_controller import LightsController
 from monitors.jenkins_monitor import JenkinsMonitor
@@ -30,7 +32,7 @@ def main():
 
     job_queues = { job.name: Queue.Queue() for job in Config.jobs }
 
-    lights_controller = LightsController(Strand(), job_queues, Config.jobs)
+    lights_controller = LightsController(LEDStrip(32), job_queues, Config.jobs)
     lights_controller.off()
 
     # start polling jenkins
