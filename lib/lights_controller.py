@@ -82,13 +82,13 @@ class LightsController:
     self.__fill_strand(RED, start, end)
 
   def __building_from_success(self, build, start, end):
-    self.__pulsate(GREEN, start, end)
+    self.__building(GREEN, start, end)
 
   def __building_from_failure(self, build, start, end):
-    self.__pulsate(RED, start, end)
+    self.__building(RED, start, end)
 
   def __building_from_unknown(self, build, start, end):
-    self.__pulsate(YELLOW, start, end)
+    self.__building(YELLOW, start, end)
 
   def __unknown(self, build, start, end):
     self.__fill_strand(YELLOW, start, end)
@@ -106,7 +106,7 @@ class LightsController:
   def __randomRgb(self):
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-  def __pulsate(self, color, start=0, end=0):
+  def __building(self, color, start=0, end=0):
     anim = LarsonScanner(self.strand, Color(color[0], color[1], color[2]),2, 0.75, start, end)
     for i in range(end-start):
       anim.step()
