@@ -7,13 +7,14 @@ import traceback
 import Queue
 
 from time import sleep
-from lib.ledstrip import Strand
-from lib.stubstrip import CliStrand
+from config.config import Config
+from lib.ledstrip import LEDStrip
+from lib.build_job import BuildJob
 from lib.lights_controller import LightsController
 from monitors.jenkins_monitor import JenkinsMonitor
 from pollers.jenkins_poller import JenkinsPoller
 
-print 'RPI_HOME: ', os.environ['RPI_HOME']
+# print 'RPI_HOME: ', os.environ['RPI_HOME']
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,17 +27,9 @@ log = logging.getLogger()
 
 def main():
 
-    # TODO config
-    jobs = ['Truman', 'ChannelApi']
-    job_queues = {job: Queue.Queue() for job in jobs}
+    job_queues = { job.name: Queue.Queue() for job in Config.jobs }
 
-    strand = CliStrand() # default to cli strand
-
-    # check to see if we're not running in cli mode
-    if  (len(sys.argv) == 1) or (sys.argv[1] != 'cli'):
-        strand = Strand()
-
-    lights_controller = LightsController(job_queues, strand)
+    lights_controller = LightsController(LEDStrip(), job_queues, Config.jobs)
     lights_controller.off()
 
     # start polling jenkins
@@ -51,8 +44,8 @@ def main():
             lights_controller.off()
             sys.exit()
         except:
-            log.error( "Unexpected error: %s", sys.exc_info()[0] )
-            log.error( traceback.format_exc() )
+            log.error("Unexpected error: %s", sys.exc_info()[0])
+            log.error(traceback.format_exc())
 
             # log.error( "exc_info: %s", sys.exc_info() )
             lights_controller.error()

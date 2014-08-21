@@ -7,6 +7,7 @@ import threading
 from lib.const import *
 from threading import Thread
 from time import sleep
+from raspledstrip.animation import *
 
 log = logging.getLogger()
 
@@ -25,16 +26,16 @@ def worker(controller, job, queue):
 
 class LightsController:
 
-  def __init__(self, job_queues, strand):
-    self.job_leds = dict.fromkeys(job_queues.keys())
-    self.jobs = job_queues.keys()
-    self.strand = strand
+  def __init__(self, led_strip, job_queues, build_jobs):
+    self.job_leds = dict()
+    self.jobs = list()
+    self.led_strip = led_strip
 
-    jobLength = self.strand.leds / len(self.job_leds)
     index = 0
-    for build in self.job_leds:
-      self.job_leds[build] = [index, index + jobLength - 1]
-      index+=jobLength
+    for job in build_jobs:
+        self.jobs.append(job.name)
+        self.job_leds[job.name] = job.led_coordinates(index)
+        index = job.next_index(index)
 
     for job, queue in job_queues.iteritems():
       t = Thread(target=worker, args=(self, job, queue, ))
@@ -61,12 +62,12 @@ class LightsController:
       self.__unknown(build, start, end)
 
   def off(self):
-    self.strand.off()
+    self.led_strip.fillOff()
 
   def random(self):
     for build in self.jobs:
       rgb = self.__randomRgb()
-      self.strand.fill(rgb[0], rgb[1], rgb[2], self.__start(build), self.__end(build))
+      self.led_strip.fillRGB(rgb[0], rgb[1], rgb[2], self.__start(build), self.__end(build))
 
   def error(self):
     self.__fill_strand(BLUE, 0, 0)
@@ -81,19 +82,19 @@ class LightsController:
     self.__fill_strand(RED, start, end)
 
   def __building_from_success(self, build, start, end):
-    self.__pulsate(GREEN, start, end)
+    self.__building(GREEN, start, end)
 
   def __building_from_failure(self, build, start, end):
-    self.__pulsate(RED, start, end)
+    self.__building(RED, start, end)
 
   def __building_from_unknown(self, build, start, end):
-    self.__pulsate(YELLOW, start, end)
+    self.__building(YELLOW, start, end)
 
   def __unknown(self, build, start, end):
     self.__fill_strand(YELLOW, start, end)
 
   def __fill_strand(self, color, start, end):
-    self.strand.fill(color[0], color[1], color[2], start, end)
+    self.led_strip.fillRGB(color[0], color[1], color[2], start, end)
 
   def __start(self, build_name):
     return self.job_leds[build_name][0]
@@ -104,12 +105,14 @@ class LightsController:
   def __randomRgb(self):
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-  def __pulsate(self, color, start=0, end=0):
+  def __building(self, color, start=0, end=0):
     for x in range(0, 40):
       b = 1 - x*.02
-      self.strand.fill(color[0] * b, color[1] * b, color[2] * b, start, end)
+      self.led_strip.fillRGB(color[0] * b, color[1] * b, color[2] * b, start, end)
       sleep(0.02)
     for x in range(40, 0, -1):
       b = 1 - x*.02
-      self.strand.fill(color[0] * b, color[1] * b, color[2] * b, start, end)
+      self.led_strip.fillRGB(color[0] * b, color[1] * b, color[2] * b, start, end)
       sleep(0.02)
+
+

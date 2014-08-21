@@ -1,22 +1,19 @@
 # Raspberry-Pipeline
 
-Designed to provide full control over a LED-strip as a means of representing a build pipeline and responding to it's changes.
+Designed to provide full control over a LED-strip as a means of representing a build pipeline and responding to its changes.
 
 An example in action: http://youtu.be/3Q9-lJn2KD8
 
--
+
 ####Features
-* Fully decoupled from your CI system through queues
-* The Pi can run on your local network while CI and the queues can be AWS/SQS-based 
 * Full control over each LED - all colours, all brightness levels
 * A set of LED animations are available (many more are possible)
 * Can play a sound (or a random selection from a group of sounds) for each pipleline event - start/end build, success, failure, etc
-* Ready to go Jenkins support using [this](https://github.com/jkelabora/snsnotify-plugin) plugin in conjunction with the [Build Pipeline Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Pipeline+Plugin)
-* Can be driven in many other ways - another example (albeit AWS/SQS again) is [this](https://github.com/jkelabora/simple-message-generator)
+* Ready to go Jenkins support
 * Way **less hassle and cost** than some of the existing build lights.. The entire kit - including the Pi - should only be a bit over $100
 * No need for a cumbersome dedicated monitor and all that goes along with it
 
--
+
 ####What do you need?
 **Raspberry Pi (Type B)** running [Occidentalis v0.2](http://learn.adafruit.com/adafruit-raspberry-pi-educational-linux-distro/overview)
 
@@ -34,26 +31,21 @@ Besides the Pi itself, these components or equivalents (which are detailed in th
 Once you're all soldered up, plugged in and powered on, ```ssh pi@raspberrypi.local``` using password ```raspberry``` and do some (or all) of the following:
 
 
-If using AWS/SQS you'll need to:
-```
-$ git clone git://github.com/boto/boto.git
-$ cd boto
-$ sudo python setup.py install
-```
 If you want to play sounds at all (mp3's only):
 ```
 $ sudo apt-get update
 $ sudo apt-get install alsa-utils
 $ sudo apt-get install mpg321
 ```
+
 Then:
 ```
 $ git clone https://github.com/jkelabora/raspberry-pipeline.git
 $ cd raspberry-pipeline
 $ sudo cp scripts/raspberry-pipeline /etc/init.d/
-$ sudo vi /etc/init.d/raspberry-pipeline         <-- will expect AWS creds by default.. update or remove as required
+$ sudo vi /etc/init.d/raspberry-pipeline
 $ sudo update-rc.d raspberry-pipeline defaults
-
 $ sudo /etc/init.d/raspberry-pipeline {start|stop}
 ```
+
 Then watch (and maybe hear) the fate of each of your builds!

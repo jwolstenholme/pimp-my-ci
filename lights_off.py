@@ -1,3 +1,3 @@
-from lib.ledstrip import Strand
+from lib.ledstrip import LEDStrip
 
-Strand().off()
+LEDStrip().fillOff()
