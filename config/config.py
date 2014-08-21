@@ -3,6 +3,8 @@ from lib.build_job import BuildJob
 
 class Config:
 
+  polling_interval_secs = 3
+
   ci_url = 'http://192.168.0.93:8080/jenkins/api/json'
 
   num_leds = 7

@@ -12,9 +12,7 @@ from lib.ledstrip import LEDStrip
 from lib.build_job import BuildJob
 from lib.lights_controller import LightsController
 from monitors.jenkins_monitor import JenkinsMonitor
-from pollers.jenkins_poller import JenkinsPoller
-
-# print 'RPI_HOME: ', os.environ['RPI_HOME']
+from pollers.http_json_poller import HttpJsonPoller
 
 logging.basicConfig(
     level=logging.INFO,
@@ -34,7 +32,7 @@ def main():
 
     # start polling jenkins
     build_monitor = JenkinsMonitor(job_queues)
-    JenkinsPoller(build_monitor).start()
+    HttpJsonPoller(build_monitor).start()
 
     while True:
         try:

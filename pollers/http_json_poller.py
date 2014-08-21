@@ -10,8 +10,7 @@ import yaml
 
 log = logging.getLogger()
 
-# TODO probably just a json/http poller
-class JenkinsPoller(threading.Thread):
+class HttpJsonPoller(threading.Thread):
 
   def __init__(self, build_monitor):
     threading.Thread.__init__(self)
@@ -21,7 +20,7 @@ class JenkinsPoller(threading.Thread):
   def run(self):
     poll = True
     while poll:
-      sleep(3.0) # TODO config
+      sleep(Config.polling_interval_secs)
 
       try:
         req = urllib2.Request(Config.ci_url)
