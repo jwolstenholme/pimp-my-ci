@@ -26,10 +26,10 @@ def worker(controller, job, queue):
 
 class LightsController:
 
-  def __init__(self, strand, job_queues, build_jobs):
+  def __init__(self, led_strip, job_queues, build_jobs):
     self.job_leds = dict()
     self.jobs = list()
-    self.strand = strand
+    self.led_strip = led_strip
 
     index = 0
     for job in build_jobs:
@@ -62,12 +62,12 @@ class LightsController:
       self.__unknown(build, start, end)
 
   def off(self):
-    self.strand.fillOff()
+    self.led_strip.fillOff()
 
   def random(self):
     for build in self.jobs:
       rgb = self.__randomRgb()
-      self.strand.fillRGB(rgb[0], rgb[1], rgb[2], self.__start(build), self.__end(build))
+      self.led_strip.fillRGB(rgb[0], rgb[1], rgb[2], self.__start(build), self.__end(build))
 
   def error(self):
     self.__fill_strand(BLUE, 0, 0)
@@ -94,7 +94,7 @@ class LightsController:
     self.__fill_strand(YELLOW, start, end)
 
   def __fill_strand(self, color, start, end):
-    self.strand.fillRGB(color[0], color[1], color[2], start, end)
+    self.led_strip.fillRGB(color[0], color[1], color[2], start, end)
 
   def __start(self, build_name):
     return self.job_leds[build_name][0]
@@ -106,8 +106,13 @@ class LightsController:
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
   def __building(self, color, start=0, end=0):
-    anim = LarsonScanner(self.strand, Color(color[0], color[1], color[2]), 2, 0.75, start, end)
-    for i in range(end-start):
-      anim.step()
-      self.strand.update()
+        for x in range(0, 40):
+      b = 1 - x*.02
+      self.strand.fill(color[0] * b, color[1] * b, color[2] * b, start, end)
+      sleep(0.02)
+    for x in range(40, 0, -1):
+      b = 1 - x*.02
+      self.strand.fill(color[0] * b, color[1] * b, color[2] * b, start, end)
+      sleep(0.02)
+
 

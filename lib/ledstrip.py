@@ -26,7 +26,7 @@ Example:
 from time import sleep
 from pprint import *
 
-class Strand:
+class LEDStrip:
 
 	def __init__(self, leds=32, dev="/dev/spidev0.0"):
 		"""
@@ -51,7 +51,7 @@ class Strand:
 	def off(self):
 		self.fill(0, 0, 0)
 
-	def fill(self, r, g, b, start=0, end=0):
+	def fillRGB(self, r, g, b, start=0, end=0):
 		"""
 		Fill the strand (or a subset) with a single color
 		"""
