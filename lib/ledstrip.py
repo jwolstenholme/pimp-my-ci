@@ -48,7 +48,7 @@ class LEDStrip:
 			# Color calculations from http://learn.adafruit.com/light-painting-with-raspberry-pi
 			self.gamma[i] = 0x80 | int(pow(float(i) / 255.0, 2.5) * 127.0 + 0.5)
 
-	def off(self):
+	def fillOff(self):
 		self.fill(0, 0, 0)
 
 	def fillRGB(self, r, g, b, start=0, end=0):
