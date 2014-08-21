@@ -17,7 +17,7 @@ class BuildJob:
         self.num_leds = num_leds
         self.offset = offset
 
-    #Returns the array of led index's this job will occupy at the given index
+    #Returns the array of led indecies this job will occupy at the given index
     def led_addresses(self, index):
         return range(index, min(index + self.num_leds, self.max_leds))
 
@@ -29,6 +29,3 @@ class BuildJob:
         if index >= self.max_leds - 1:
             raise ArithmeticError('No leds available')
         return self.num_leds + self.offset + index
-
-
-
