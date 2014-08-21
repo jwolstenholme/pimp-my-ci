@@ -61,6 +61,7 @@ class LEDStrip:
             end = self.lastIndex
         for led in range(start, end + 1): #since 0-index include end in range
             self.__set_internal(led, color)
+        self.update()
 
     #Fill the strand (or a subset) with a single color using RGB values
     def fillRGB(self, r, g, b, start=0, end=-1):
