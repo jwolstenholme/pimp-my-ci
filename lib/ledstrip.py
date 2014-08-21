@@ -49,7 +49,7 @@ class LEDStrip:
 			self.gamma[i] = 0x80 | int(pow(float(i) / 255.0, 2.5) * 127.0 + 0.5)
 
 	def fillOff(self):
-		self.fill(0, 0, 0)
+		self.fillRGB(0, 0, 0)
 
 	def fillRGB(self, r, g, b, start=0, end=0):
 		"""
