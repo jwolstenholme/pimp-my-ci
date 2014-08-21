@@ -106,7 +106,7 @@ class LightsController:
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
   def __building(self, color, start=0, end=0):
-        for x in range(0, 40):
+    for x in range(0, 40):
       b = 1 - x*.02
       self.strand.fill(color[0] * b, color[1] * b, color[2] * b, start, end)
       sleep(0.02)
