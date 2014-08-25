@@ -64,5 +64,10 @@ Included in the source is a gui runner which emulates the LED strip for local de
 ./run-gui.sh
 ```
 
+To run all of the unit tests in the project (admitidly not many there at the moment) execute the following from the project's root directory.
+```
+python -m unittest discover
+```
+
 To contribute your modifications back to the community simply create a pull request. Please ensure that both the development gui and the raspberry pi code continue to work.
 
