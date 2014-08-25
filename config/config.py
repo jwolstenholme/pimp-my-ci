@@ -5,7 +5,7 @@ class Config:
 
   polling_interval_secs = 3
 
-  ci_url = 'http://localhost:8080/jenkins/api/json'
+  ci_url = 'http://192.168.0.69:8080/jenkins/api/json'
 
   num_leds = 7
   jobs=[

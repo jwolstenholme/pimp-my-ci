@@ -1,0 +1,26 @@
+#! /bin/sh
+# /etc/init.d/pimp-my-ci
+
+export HOME
+export RPI_HOME=/home/pi/raspberry-pipeline
+
+case "$1" in
+    start)
+        echo "Pimping up your ci..."
+        python $RPI_HOME/pimp_my_ci.py 2>&1 &
+    ;;
+    stop)
+        echo "De-pimping your ci..."
+        RPI_PID=`ps auxwww | grep pimp_my_ci.py | grep -v grep | head -1 | awk '{print $2}'`
+        if [ $RPI_PID ]
+        then
+          kill -9 $RPI_PID
+        fi
+        python $RPI_HOME/lights_off.py
+    ;;
+    *)
+        echo "Usage: /etc/init.d/pimp-my-ci {start|stop}"
+        exit 1
+    ;;
+esac
+exit 0

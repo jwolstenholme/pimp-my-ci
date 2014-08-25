@@ -57,7 +57,7 @@ class PimpMyCi:
 
 def main():
     led_strip = LEDStrip()
-    PimpMyCi(ledstrip).start()
+    PimpMyCi(led_strip).start()
 
 if __name__ == '__main__':
     main()
