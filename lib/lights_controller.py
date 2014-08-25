@@ -7,7 +7,6 @@ import threading
 from lib.const import *
 from threading import Thread
 from time import sleep
-from raspledstrip.animation import *
 
 log = logging.getLogger()
 

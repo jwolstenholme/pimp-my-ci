@@ -33,6 +33,8 @@ class PimpMyCi:
         lights_controller = LightsController(led_strip, job_queues, Config.jobs)
         lights_controller.off()
 
+        sounds_controller = SoundsController(job_queues)
+
         # start polling jenkins
         build_monitor = JenkinsMonitor(job_queues)
         HttpJsonPoller(build_monitor).start()
