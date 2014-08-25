@@ -5,7 +5,8 @@ Designed to provide full control over a LED-strip as a means of representing a b
 An example in action: http://youtu.be/3Q9-lJn2KD8
 
 
-####Features
+### Features
+
 * Full control over each LED - all colours, all brightness levels
 * A set of LED animations are available (many more are possible)
 * Can play a sound (or a random selection from a group of sounds) for each pipleline event - start/end build, success, failure, etc
@@ -14,7 +15,8 @@ An example in action: http://youtu.be/3Q9-lJn2KD8
 * No need for a cumbersome dedicated monitor and all that goes along with it
 
 
-####What do you need?
+### What do you need?
+
 **Raspberry Pi (Type B)** running [Occidentalis v0.2](http://learn.adafruit.com/adafruit-raspberry-pi-educational-linux-distro/overview)
 
 Follow the wiring and hardware setup instructions detailed [here](http://learn.adafruit.com/light-painting-with-raspberry-pi/hardware).
@@ -49,3 +51,18 @@ $ sudo service start pimp-my-ci
 ```
 
 Then watch (and maybe hear) the fate of each of your builds!
+
+### Development Guide
+
+So you want to customise your lights? No problem!
+
+Included in the source is a gui runner which emulates the LED strip for local development & rapid testing. To get started on that just follow these steps.
+
+* Install the Kivy GUI library from [http://kivy.org/](http://kivy.org)
+* To run the gui simply execute
+```
+./run-gui.sh
+```
+
+To contribute your modifications back to the community simply create a pull request. Please ensure that both the development gui and the raspberry pi code continue to work.
+
