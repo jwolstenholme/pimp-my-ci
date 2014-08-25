@@ -65,6 +65,11 @@ Included in the source is a gui runner which emulates the LED strip for local de
 ./run-gui.sh
 ```
 
+In order to play sounds mpg123 must be available. These easiest way to get this is via [homebrew](http://brew.sh/)
+```
+brew install mpg123
+```
+
 To run all of the unit tests in the project (admitidly not many there at the moment) execute the following from the project's root directory.
 ```
 python -m unittest discover

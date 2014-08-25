@@ -1,27 +1,25 @@
 
 import logging
 import random
-import Queue
 import threading
+from time import sleep
 
 from lib.const import *
-from threading import Thread
-from time import sleep
 
 log = logging.getLogger()
 
-def worker(controller, job, queue):
-  status = OFF
-  while True:
-    try:
-      status = queue.get_nowait()
-      controller.update_build_status(job, status)
-      queue.task_done()
-    except Queue.Empty:
-      if (status % 2 == 1): # check to see if we're an animation
-        controller.update_build_status(job, status)
-      else:
-        sleep(1)
+job_statuses = dict()
+
+def animation_worker(led_strip, job, status, color, start, end):
+  while job_statuses[job] == status:
+    for x in range(0, 40):
+      b = 1 - x*.02
+      led_strip.fillRGB(color[0] * b, color[1] * b, color[2] * b, start, end)
+      sleep(0.02)
+    for x in range(40, 0, -1):
+      b = 1 - x*.02
+      led_strip.fillRGB(color[0] * b, color[1] * b, color[2] * b, start, end)
+      sleep(0.02)
 
 class LightsController:
 
@@ -36,15 +34,11 @@ class LightsController:
         self.job_leds[job.name] = job.led_coordinates(index)
         index = job.next_index(index)
 
-    for job, queue in job_queues.iteritems():
-      t = Thread(target=worker, args=(self, job, queue, ))
-      t.daemon = True
-      t.start()
-
-  def update_build_status(self, build, status):
-    start = self.__start(build)
-    end = self.__end(build)
-    # print 'update_build_status: ', build, status, start, end
+  def update_build_status(self, job, status):
+    start = self.__start(job)
+    end = self.__end(job)
+    job_statuses[job] = status
+    # print 'update_build_status: ', job, status, start, end
     if (status == OFF):
       self.__off(start, end)
     elif (status == SUCCESS):
@@ -52,21 +46,21 @@ class LightsController:
     elif (status == FAILURE):
       self.__failure(start, end)
     elif (status == BUILDING_FROM_SUCCESS):
-      self.__building_from_success(build, start, end)
+      self.__building_from_success(job, start, end)
     elif (status == BUILDING_FROM_FAILURE):
-      self.__building_from_failure(build, start, end)
+      self.__building_from_failure(job, start, end)
     elif (status == BUILDING_FROM_UNKNOWN):
-      self.__building_from_unknown(build, start, end)
+      self.__building_from_unknown(job, start, end)
     else:
-      self.__unknown(build, start, end)
+      self.__unknown(job, start, end)
 
   def off(self):
     self.led_strip.fillOff()
 
   def random(self):
-    for build in self.jobs:
+    for job in self.jobs:
       rgb = self.__randomRgb()
-      self.led_strip.fillRGB(rgb[0], rgb[1], rgb[2], self.__start(build), self.__end(build))
+      self.led_strip.fillRGB(rgb[0], rgb[1], rgb[2], self.__start(job), self.__end(job))
 
   def error(self):
     self.__fill_strand(BLUE, 0, 0)
@@ -80,16 +74,16 @@ class LightsController:
   def __failure(self, start, end):
     self.__fill_strand(RED, start, end)
 
-  def __building_from_success(self, build, start, end):
-    self.__building(GREEN, start, end)
+  def __building_from_success(self, job, start, end):
+    self.__building(job, BUILDING_FROM_SUCCESS, GREEN, start, end)
 
-  def __building_from_failure(self, build, start, end):
-    self.__building(RED, start, end)
+  def __building_from_failure(self, job, start, end):
+    self.__building(job, BUILDING_FROM_FAILURE, RED, start, end)
 
-  def __building_from_unknown(self, build, start, end):
-    self.__building(YELLOW, start, end)
+  def __building_from_unknown(self, job, start, end):
+    self.__building(job, BUILDING_FROM_UNKNOWN, YELLOW, start, end)
 
-  def __unknown(self, build, start, end):
+  def __unknown(self, job, start, end):
     self.__fill_strand(YELLOW, start, end)
 
   def __fill_strand(self, color, start, end):
@@ -107,14 +101,9 @@ class LightsController:
   def __randomRgb(self):
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-  def __building(self, color, start=0, end=0):
-    for x in range(0, 40):
-      b = 1 - x*.02
-      self.led_strip.fillRGB(color[0] * b, color[1] * b, color[2] * b, start, end)
-      sleep(0.02)
-    for x in range(40, 0, -1):
-      b = 1 - x*.02
-      self.led_strip.fillRGB(color[0] * b, color[1] * b, color[2] * b, start, end)
-      sleep(0.02)
+  def __building(self, job, status, color, start, end):
+    t = threading.Thread(target=animation_worker, args=(self.led_strip, job, status, color, start, end))
+    t.daemon = True
+    t.start()
 
 
