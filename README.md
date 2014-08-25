@@ -45,7 +45,7 @@ $ cd pimp-my-ci
 $ sudo cp scripts/pimp-my-ci /etc/init.d/
 $ sudo vi /etc/init.d/pimp-my-ci
 $ sudo update-rc.d pimp-my-ci defaults
-$ sudo /etc/init.d/pimp-my-ci {start|stop}
+$ sudo service start pimp-my-ci
 ```
 
 Then watch (and maybe hear) the fate of each of your builds!
