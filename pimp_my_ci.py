@@ -56,7 +56,7 @@ class PimpMyCi:
         self.running = False
 
 def main():
-    led_strip = LEDStrip()
+    led_strip = LEDStrip(Config.total_number_leds)
     PimpMyCi(led_strip).start()
 
 if __name__ == '__main__':
