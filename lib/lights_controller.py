@@ -94,7 +94,10 @@ class LightsController:
     self.__fill_strand(YELLOW, start, end)
 
   def __fill_strand(self, color, start, end):
+    semaphore = threading.BoundedSemaphore()
+    semaphore.acquire()
     self.led_strip.fillRGB(color[0], color[1], color[2], start, end)
+    semaphore.release()
 
   def __start(self, build_name):
     return self.job_leds[build_name][0]
