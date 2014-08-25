@@ -2,7 +2,7 @@
 # /etc/init.d/pimp-my-ci
 
 export HOME
-export RPI_HOME=/home/pi/raspberry-pipeline
+export RPI_HOME=/home/pi/pimp-my-ci
 
 case "$1" in
     start)

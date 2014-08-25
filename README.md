@@ -1,4 +1,4 @@
-# Raspberry-Pipeline
+# Pimp My CI
 
 Designed to provide full control over a LED-strip as a means of representing a build pipeline and responding to its changes.
 
@@ -9,7 +9,7 @@ An example in action: http://youtu.be/3Q9-lJn2KD8
 * Full control over each LED - all colours, all brightness levels
 * A set of LED animations are available (many more are possible)
 * Can play a sound (or a random selection from a group of sounds) for each pipleline event - start/end build, success, failure, etc
-* Ready to go Jenkins support
+* Jenkins support ready - more on the way!
 * Way **less hassle and cost** than some of the existing build lights.. The entire kit - including the Pi - should only be a bit over $100
 * No need for a cumbersome dedicated monitor and all that goes along with it
 
@@ -40,12 +40,12 @@ $ sudo apt-get install mpg321
 
 Then:
 ```
-$ git clone https://github.com/jkelabora/raspberry-pipeline.git
-$ cd raspberry-pipeline
-$ sudo cp scripts/raspberry-pipeline /etc/init.d/
-$ sudo vi /etc/init.d/raspberry-pipeline
-$ sudo update-rc.d raspberry-pipeline defaults
-$ sudo /etc/init.d/raspberry-pipeline {start|stop}
+$ git clone https://github.com/jwolstenholme/pimp-my-ci.git
+$ cd pimp-my-ci
+$ sudo cp scripts/pimp-my-ci /etc/init.d/
+$ sudo vi /etc/init.d/pimp-my-ci
+$ sudo update-rc.d pimp-my-ci defaults
+$ sudo /etc/init.d/pimp-my-ci {start|stop}
 ```
 
 Then watch (and maybe hear) the fate of each of your builds!

@@ -16,7 +16,7 @@ from pollers.http_json_poller import HttpJsonPoller
 
 logging.basicConfig(
     level=logging.INFO,
-    filename="{0}/logs/pipeline.log".format(os.environ['RPI_HOME']),
+    filename="{0}/logs/pimpmyci.log".format(os.environ['RPI_HOME']),
     format="%(asctime)s <%(threadName)s>: %(message)s",
     datefmt='%m/%d/%Y %I:%M:%S %p',
     maxBytes=1024,
