@@ -4,6 +4,7 @@ Designed to provide full control over a LED-strip as a means of representing a b
 
 An example in action: http://youtu.be/3Q9-lJn2KD8
 
+[![Build Status](https://travis-ci.org/jwolstenholme/pimp-my-ci.svg?branch=master)](https://travis-ci.org/jwolstenholme/pimp-my-ci)
 
 ### Features
 
