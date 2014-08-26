@@ -9,7 +9,7 @@ import Queue
 
 from time import sleep
 from threading import Thread
-from config.config import Config
+from lib.config import Config
 from lib.ledstrip import LEDStrip
 from lib.build_job import BuildJob
 from lib.lights_controller import LightsController
@@ -41,10 +41,11 @@ class PimpMyCi:
     running = True
 
     def __init__(self, led_strip):
-        job_queues = { job.name: Queue.Queue() for job in Config.jobs }
+        jobs = BuildJob.from_dictionaries(Config.jobs)
+        job_queues = { job.name: Queue.Queue() for job in jobs }
 
         sounds_controller = SoundsController(job_queues)
-        lights_controller = LightsController(led_strip, job_queues, Config.jobs)
+        lights_controller = LightsController(led_strip, job_queues, jobs)
         lights_controller.off()
 
         # start polling jenkins

@@ -1,5 +1,6 @@
 
-from config.config import Config
+from lib.build_job import BuildJob
+from lib.config import Config
 
 import urllib2
 import yaml
@@ -15,7 +16,10 @@ class Check:
     print "\n==== Builds ===="
     index = 0
     job_leds = dict()
-    for job in Config.jobs:
+
+    build_jobs = BuildJob.from_dictionaries(Config.jobs)
+
+    for job in build_jobs:
       print " ", job.name.ljust(16), "leds", job.led_coordinates(index)
       for i in job.led_addresses(index):
         job_leds[i] = job.name
@@ -35,4 +39,4 @@ class Check:
       print "Error:", sys.exc_info()[0]
 
 if __name__ == '__main__':
-    Check()
+  Check()
