@@ -24,6 +24,7 @@ def animation_worker(led_strip, job, status, color, start, end):
 class LightsController:
 
   def __init__(self, led_strip, build_jobs):
+    self.animation_thread = None
     self.job_leds = dict()
     self.jobs = list()
     self.led_strip = led_strip
@@ -39,6 +40,9 @@ class LightsController:
     end = self.__end(job.name)
     job_statuses[job] = status
     # print 'update_build_status: ', job, status, start, end
+    if (self.animation_thread != None and self.animation_thread.isAlive()):
+      self.animation_thread.join()
+
     if (status == OFF):
       self.__off(start, end)
     elif (status == SUCCESS):
@@ -102,8 +106,8 @@ class LightsController:
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
   def __building(self, job, status, color, start, end):
-    t = threading.Thread(target=animation_worker, args=(self.led_strip, job, status, color, start, end))
-    t.daemon = True
-    t.start()
+    self.animation_thread = threading.Thread(target=animation_worker, args=(self.led_strip, job, status, color, start, end))
+    self.animation_thread.daemon = True
+    self.animation_thread.start()
 
 
