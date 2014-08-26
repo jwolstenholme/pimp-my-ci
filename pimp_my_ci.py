@@ -68,9 +68,9 @@ class PimpMyCi:
                 log.info('^C received, shutting down controller')
                 lights_controller.off()
                 sys.exit()
-            except:
-                log.error("Unexpected error: %s", sys.exc_info()[0])
-                log.error(traceback.format_exc())
+            except Exception as e:
+                log.error("Unexpected error type: %s", type(e))
+                log.error("Unexpected error args: %s", e.args)
                 lights_controller.error()
 
     def stop(self):

@@ -2,6 +2,8 @@
 from lib.build_job import BuildJob
 from lib.config import Config
 
+# import os
+# import sys
 import urllib2
 import yaml
 
@@ -44,8 +46,8 @@ class Check:
       req.add_header('Content-Type', 'application/json')
       response_body = urllib2.urlopen(req).read()
       print yaml.load(response_body)
-    except:
-      print "Error:", sys.exc_info()[0]
+    except Exception as e:
+      print "Error:", type(e), e.args, e
 
 
 if __name__ == '__main__':
