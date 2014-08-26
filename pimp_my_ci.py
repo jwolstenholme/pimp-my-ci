@@ -42,13 +42,14 @@ class PimpMyCi:
 
     def __init__(self, led_strip):
         jobs = BuildJob.from_dictionaries(Config.jobs)
-        job_queues = { job.name: Queue.Queue() for job in jobs }
+        job_names = [ job.name for job in jobs ]
 
-        sounds_controller = SoundsController(job_queues)
-        lights_controller = LightsController(led_strip, job_queues, jobs)
+        sounds_controller = SoundsController(job_names)
+        lights_controller = LightsController(led_strip, jobs)
         lights_controller.off()
 
         # start polling jenkins
+        job_queues = { job: Queue.Queue() for job in jobs }
         build_monitor = JenkinsMonitor(job_queues)
         HttpJsonPoller(build_monitor).start()
 

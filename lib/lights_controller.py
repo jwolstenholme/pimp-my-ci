@@ -23,7 +23,7 @@ def animation_worker(led_strip, job, status, color, start, end):
 
 class LightsController:
 
-  def __init__(self, led_strip, job_queues, build_jobs):
+  def __init__(self, led_strip, build_jobs):
     self.job_leds = dict()
     self.jobs = list()
     self.led_strip = led_strip
@@ -35,8 +35,8 @@ class LightsController:
         index = job.next_index(index)
 
   def update_build_status(self, job, status):
-    start = self.__start(job)
-    end = self.__end(job)
+    start = self.__start(job.name)
+    end = self.__end(job.name)
     job_statuses[job] = status
     # print 'update_build_status: ', job, status, start, end
     if (status == OFF):

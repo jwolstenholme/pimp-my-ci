@@ -12,8 +12,8 @@ class Config:
 
   # The build jobs to monitor
   jobs=[
-    dict(name='test1', num_leds=7, success='Burns_Excellent', failure='Sheeeeiiiit'),
-    dict(name='test2', num_leds=7, success=None, failure='Sheeeeiiiit'),
+    dict(name='test1', num_leds=7, success='Burns_Excellent', failure='Sheeeeeiiiit'),
+    dict(name='test2', num_leds=7, success=None, failure='Sheeeeeiiiit'),
     dict(name='test3', num_leds=7, success= 'Burns_Excellent', failure=None),
     dict(name='test4', num_leds=7)
   ]
