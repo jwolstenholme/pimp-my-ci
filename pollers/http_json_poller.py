@@ -1,5 +1,4 @@
 
-from config.config import Config
 from time import sleep
 import logging
 import json
@@ -7,6 +6,8 @@ import sys
 import threading
 import urllib2
 import yaml
+
+from lib.config import Config
 
 log = logging.getLogger()
 
