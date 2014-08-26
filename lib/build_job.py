@@ -4,10 +4,11 @@ from lib.config import Config
 class BuildJob:
 
     def __init__(self, dictionary):
-        self.name = dictionary.get('name')
-        self.num_leds = dictionary.get('num_leds', 1)
-        self.offset = dictionary.get('offset', 1)
-
+        self.name       = dictionary.get('name')
+        self.num_leds   = dictionary.get('num_leds', 1)
+        self.offset     = dictionary.get('offset', 1)
+        self.success    = dictionary.get('success', '__RANDOM')
+        self.failure    = dictionary.get('failure', '__RANDOM')
 
         if self.name is None or self.name.strip() == '':
             raise ValueError('Name must not be blank')
