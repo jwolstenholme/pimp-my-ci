@@ -5,7 +5,7 @@ from lib.config import Config
 # import os
 # import sys
 import urllib2
-import yaml
+import json
 
 class Check:
 
@@ -45,7 +45,7 @@ class Check:
       req = urllib2.Request(Config.ci_url)
       req.add_header('Content-Type', 'application/json')
       response_body = urllib2.urlopen(req).read()
-      print yaml.load(response_body)
+      print json.dumps(json.loads(response_body), indent=4, separators=(',', ': '))
     except Exception as e:
       print "Error:", type(e), e.args, e
 
