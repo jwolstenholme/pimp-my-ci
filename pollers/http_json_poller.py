@@ -1,7 +1,6 @@
 
 from time import sleep
 import logging
-import json
 import sys
 import threading
 import urllib2
@@ -13,10 +12,11 @@ log = logging.getLogger()
 
 class HttpJsonPoller(threading.Thread):
 
-  def __init__(self, build_monitor):
+  def __init__(self, url, build_monitor):
     threading.Thread.__init__(self)
     self.daemon = True
     self.build_monitor = build_monitor
+    self.url = url
 
   def run(self):
     poll = True
@@ -24,11 +24,15 @@ class HttpJsonPoller(threading.Thread):
       sleep(Config.polling_interval_secs)
 
       try:
-        req = urllib2.Request(Config.ci_url)
-        req.add_header('Content-Type', 'application/json')
+        req = urllib2.Request(self.url)
+        self.customise_request(req)
 
         response_body = urllib2.urlopen(req).read()
         self.build_monitor.process_build( yaml.load(response_body) )
       except:
         self.build_monitor.error()
-        log.error( "JenkinsPoller error: %s", sys.exc_info()[0] )
+        log.error( "HttpJsonPoller error: %s", sys.exc_info()[0] )
+
+  def customise_request(self, request):
+    request.add_header('Content-Type', 'application/json')
+

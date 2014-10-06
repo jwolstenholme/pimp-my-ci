@@ -15,11 +15,7 @@ status_dict = {
 class JenkinsMonitor:
 
   def __init__(self, job_queues):
-    # we're only interested in build name : queue
-    self.job_queues = dict()
-    for job, queue in job_queues.iteritems():
-      self.job_queues[job.name] = queue
-
+    self.job_queues = job_queues
     self.job_statuses = dict.fromkeys(self.job_queues.keys())
 
   def process_build(self, build):

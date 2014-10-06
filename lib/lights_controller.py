@@ -11,7 +11,7 @@ log = logging.getLogger()
 job_statuses = dict()
 
 def animation_worker(led_strip, job, status, color, start, end):
-  while job_statuses[job] == status:
+  while job_statuses[job.name] == status:
     for x in range(0, 40):
       b = 1 - x*.02
       led_strip.fillRGB(color[0] * b, color[1] * b, color[2] * b, start, end)
@@ -39,8 +39,8 @@ class LightsController:
   def update_build_status(self, job, status):
     start = self.__start(job.name)
     end = self.__end(job.name)
-    job_statuses[job] = status
-    # print 'update_build_status: ', job, status, start, end
+    job_statuses[job.name] = status
+    print 'update_build_status: ', job.name, status, start, end
 
     animation_thread = self.animation_threads[job.name]
     if (animation_thread != None and animation_thread.isAlive()):
