@@ -20,8 +20,7 @@ class Config:
   jobs = [
     dict( name = 'test1',
           success = 'Burns_Excellent',
-          failure = 'Sheeeeeiiiit',
-          platform = 'travis'),
+          failure = 'Sheeeeeiiiit'),
 
     dict( name = 'test2',
           success = None,
