@@ -11,7 +11,7 @@ from time import sleep
 from threading import Thread
 from lib.config import Config
 from lib.ledstrip import LEDStrip
-from lib.build_job import BuildJob
+from lib.build_jobs import BuildJobs
 from lib.lights_controller import LightsController
 from lib.sounds_controller import SoundsController
 
@@ -30,7 +30,7 @@ class PimpMyCi:
 
     def __init__(self, led_strip):
         #jobs is an instance of BuildJobs
-        jobs = BuildJob.from_dictionaries(Config.platform, Config.job_defaults, Config.jobs)
+        jobs = BuildJobs.from_dictionaries(Config.platform, Config.job_defaults, Config.jobs)
 
         sounds_controller = SoundsController(jobs.names)
         lights_controller = LightsController(led_strip, jobs)
