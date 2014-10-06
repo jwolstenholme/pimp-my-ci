@@ -40,7 +40,7 @@ class LightsController:
     start = self.__start(job.name)
     end = self.__end(job.name)
     job_statuses[job.name] = status
-    print 'update_build_status: ', job.name, status, start, end
+    # print 'update_build_status: ', job.name, status, start, end
 
     animation_thread = self.animation_threads[job.name]
     if (animation_thread != None and animation_thread.isAlive()):
