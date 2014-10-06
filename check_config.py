@@ -1,5 +1,5 @@
 
-from lib.build_job import BuildJob
+from lib.build_jobs import BuildJobs
 from lib.config import Config
 
 import urllib2
@@ -8,7 +8,7 @@ import json
 class Check:
 
   def __init__(self):
-    self.build_jobs = BuildJob.from_dictionaries(Config.platform, Config.job_defaults, Config.jobs)
+    self.build_jobs = BuildJobs.from_dictionaries(Config.platform, Config.job_defaults, Config.jobs)
     self.printGlobal()
     self.printJobs()
     self.printLedLayout()
