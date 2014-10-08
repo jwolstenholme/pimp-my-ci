@@ -25,14 +25,10 @@ class HttpJsonPoller(threading.Thread):
 
       try:
         req = urllib2.Request(self.url)
-        self.customise_request(req)
-
+        req.add_header('Content-Type', 'application/json')
         response_body = urllib2.urlopen(req).read()
         self.build_monitor.process_build( yaml.load(response_body) )
       except:
         self.build_monitor.error()
         log.error( "HttpJsonPoller error: %s", sys.exc_info()[0] )
-
-  def customise_request(self, request):
-    request.add_header('Content-Type', 'application/json')
 
