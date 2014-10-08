@@ -20,15 +20,15 @@ class Config:
   jobs = [
     dict( name = 'test1',
           success = 'Burns_Excellent',
-          failure = 'Sheeeeeiiiit'),
+          failure = 'Sheeeeeiiiit' ),
 
     dict( name = 'test2',
           success = None,
-          failure = 'Sheeeeeiiiit'),
+          failure = 'Sheeeeeiiiit' ),
 
     dict( name = 'test3',
           success = 'Burns_Excellent',
-          failure = None),
+          failure = None ),
 
-    dict( name = 'test4')
+    dict( name = 'test4' )
   ]
