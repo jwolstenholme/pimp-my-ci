@@ -3,6 +3,7 @@ import Queue
 from threading import Thread
 from time import sleep
 from lib.build_job import BuildJob
+from monitors.circleci_monitor import CircleciMonitor
 from monitors.jenkins_monitor import JenkinsMonitor
 from monitors.travis_monitor import TravisMonitor
 from pollers.http_json_poller import HttpJsonPoller
@@ -42,20 +43,18 @@ class BuildJobs(list):
             return JenkinsBuildJobs(defaults, job_dictionaries)
         elif platform == 'travis':
             return TravisBuildJobs(defaults, job_dictionaries)
+        elif platform == 'circleci':
+            return CircleciBuildJobs(defaults, job_dictionaries)
         else:
-            raise ValueError('platform must be one of [jenkins, travis]')
+            raise ValueError('platform must be one of [circleci, jenkins, travis]')
 
 
 class JenkinsBuildJobs(BuildJobs):
 
-    def __init__(self, defaults, job_dictionaries):
-        BuildJobs.__init__(self, defaults, job_dictionaries)
-        self.url = defaults['url']
-
     def start_polling(self, controllers):
         self.create_threads(controllers)
         monitor = JenkinsMonitor(self.queues)
-        HttpJsonPoller(self.url, monitor).start()
+        HttpJsonPoller(self, monitor).start()
 
 class TravisBuildJobs(BuildJobs):
 
@@ -64,3 +63,9 @@ class TravisBuildJobs(BuildJobs):
         monitor = TravisMonitor(self.queues)
         TravisPoller(self, monitor).start()
 
+class CircleciBuildJobs(BuildJobs):
+
+    def start_polling(self, controllers):
+        self.create_threads(controllers)
+        monitor = CircleciMonitor(self.queues)
+        HttpJsonPoller(self, monitor).start()

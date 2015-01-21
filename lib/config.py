@@ -1,31 +1,17 @@
 
 class Config:
 
-  # The total number of LEDs available on the strip
   total_number_leds = 32
 
-  # The number of seconds to wait between polling the CI server
   polling_interval_secs = 3
 
-  # The CI platform we're hitting up
-  platform = 'jenkins'
-
-  # Default settings across all jobs
-  job_defaults = dict(  num_leds = 7, url = 'http://192.168.0.40:8080/jenkins/api/json' )
+  platform = 'circleci'
+  job_defaults = dict( num_leds = 32 )
 
   # The build jobs to monitor - defaults are overridden
   jobs = [
-    dict( name = 'test1',
+    dict( name = 'vix',
+          url = 'https://circleci.com/api/v1/project/DiUS/vix?circle-token=8dd04ea68b5caf87a3be4ed050a97ae9d91ae4e9&limit=1&offset=0',
           success = 'Burns_Excellent',
           failure = 'Sheeeeeiiiit' ),
-
-    dict( name = 'test2',
-          success = None,
-          failure = 'Sheeeeeiiiit' ),
-
-    dict( name = 'test3',
-          success = 'Burns_Excellent',
-          failure = None ),
-
-    dict( name = 'test4' )
   ]

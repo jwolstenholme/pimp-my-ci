@@ -18,7 +18,7 @@ class JenkinsMonitor:
     self.job_queues = job_queues
     self.job_statuses = dict.fromkeys(self.job_queues.keys())
 
-  def process_build(self, build):
+  def process_build_for_job(self, build, job):
     job_statuses = self.__parse_build(build)
     differences = self.__filter_differences(self.job_statuses, job_statuses)
 

@@ -21,7 +21,7 @@ class BuildJob:
         if self.is_blank(self.url):
             raise ValueError('URL must not be blank')
 
-        if self.num_leds <= 0 or self.num_leds >= Config.total_number_leds:
+        if self.num_leds <= 0 or self.num_leds > Config.total_number_leds:
             raise ValueError('Invalid num_leds')
 
         if self.offset < 0 or self.offset >= Config.total_number_leds:
