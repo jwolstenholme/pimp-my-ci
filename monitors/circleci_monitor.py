@@ -2,6 +2,7 @@
 from lib.const import *
 
 status_dict = {
+  'fixed'                   : SUCCESS,
   'success'                 : SUCCESS,
   'failed'                  : FAILURE,
   'building_from_success'   : BUILDING_FROM_SUCCESS,
