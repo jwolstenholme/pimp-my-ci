@@ -5,6 +5,7 @@ status_dict = {
   'fixed'                   : SUCCESS,
   'success'                 : SUCCESS,
   'failed'                  : FAILURE,
+  'building_from_fixed'     : BUILDING_FROM_SUCCESS,
   'building_from_success'   : BUILDING_FROM_SUCCESS,
   'building_from_failed'    : BUILDING_FROM_FAILURE,
   'building_from_unknown'   : BUILDING_FROM_UNKNOWN,
